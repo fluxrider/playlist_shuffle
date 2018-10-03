@@ -42,7 +42,7 @@ double stats_stddev(stats_t * s) {
 
 int main(int argc, char * argv[]) {
   // read args
-  if(argc != 4) {
+  if(argc < 4) {
     printf("Need shared library and SIZE and STATS_COUNT. e.g. ./random.so 100 10000\n");
     return 1;
   }
@@ -104,10 +104,21 @@ int main(int argc, char * argv[]) {
   // the higher the better
   else if(std > .4) judge_std = "ideal";
   else judge_std = "good";
-  printf("min: %.2f (%u) [%s]\n", min, stats.min, judge_min);
-  printf("max: %.2f (%u) [%s]\n", max, stats.max, judge_max);
-  printf("avg: %.2f (%.2f) [%s]\n", avg, stats_average(&stats), judge_avg);
-  printf("std: %.2f (%.2f) [%s]\n", std, stats_stddev(&stats), judge_std);
+
+  if(argc == 4) {
+    printf("min: %.2f (%u) [%s]\n", min, stats.min, judge_min);
+    printf("max: %.2f (%u) [%s]\n", max, stats.max, judge_max);
+    printf("avg: %.2f (%.2f) [%s]\n", avg, stats_average(&stats), judge_avg);
+    printf("std: %.2f (%.2f) [%s]\n", std, stats_stddev(&stats), judge_std);
+  } else {
+    // report with markdown table format
+    printf("| Distance | Value | Normalized | Comment |\n");
+    printf("|:---:|:---:|:---:|:---:|\n");
+    printf("| min | %u | %.2f | %s |\n", stats.min, min, judge_min);
+    printf("| max | %u | %.2f | %s |\n", stats.max, max, judge_max);
+    printf("| avg | %.2f | %.2f | %s |\n", stats_average(&stats), avg, judge_avg);
+    printf("| std | %.2f | %.2f | %s |\n", stats_stddev(&stats), std, judge_std);
+  }
   
   // close dynamic library
   if(dlclose(sequence)) { printf("%s\n", dlerror()); return 1; }

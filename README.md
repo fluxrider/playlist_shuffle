@@ -1,4 +1,4 @@
-Disjoint Shuffle
+Disjoint Shuffle in a Looping Sequence
 =====
 David Lareau © 2018
 No Affiliations
@@ -27,14 +27,14 @@ One of the simplest algorithm to think about when generating the next entry in a
 
 The variance in the sequence is ideal, meaning the next entry is always a surprise.
 
-Distance statistics in a simulation with sequence size being 100, and looping 10,000 times.
+Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times.
 
-| Distance | Normalized | Value | Comment |
+| Distance | Value | Normalized | Comment |
 |:---:|:---:|:---:|:---:|
-| min | 1 | 0.01 | Horrid |
-| max | 1020 | 10.20 | Horrid |
-| avg | 99.87 | 1.00  | Ideal |
-| std | 100.75 | 1.01 | Ideal |
+| min | 1 | 0.01 | horrid |
+| max | 946 | 9.46 | horrid |
+| avg | 100.26 | 1.00 | ideal |
+| std | 98.29 | 0.98 | ideal |
 
 ## Shuffle
 
@@ -46,13 +46,27 @@ Note that the common algorithm for shuffling (Fisher-Yate) is iterative, so you 
 
 What becomes annoying are the looping boundaries, where an entry may be seen as soon as the next, or as far as a full pass.
 
-TODO stats
+Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times.
+
+| Distance | Value | Normalized | Comment |
+|:---:|:---:|:---:|:---:|
+| min | 2 | 0.02 | horrid |
+| max | 199 | 1.99 | good |
+| avg | 100.01 | 1.00 | ideal |
+| std | 40.41 | 0.40 | ideal |
 
 ## In Order
 
 Let's compare our metrics with a sequence that loops, but isn't shuffled. Now the distance between each entry is ideal, but the variance is zero. In other words, listener knows which song will come next.
 
-TODO stats
+Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times.
+
+| Distance | Value | Normalized | Comment |
+|:---:|:---:|:---:|:---:|
+| min | 100 | 1.00 | ideal |
+| max | 100 | 1.00 | ideal |
+| avg | 100.00 | 1.00 | ideal |
+| std | 0.00 | 0.00 | horrid |
 
 ## Two Shuffles
 
@@ -64,7 +78,14 @@ However, the variance is left to be desired. Over just one loop, the listener kn
 
 TODO image of two groups
 
-TODO stats
+Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length.
+
+| Distance | Value | Normalized | Comment |
+|:---:|:---:|:---:|:---:|
+| min | 51 | 0.51 | good |
+| max | 149 | 1.49 | good |
+| avg | 100.00 | 1.00 | ideal |
+| std | 20.34 | 0.20 | good |
 
 ## Two Shuffles (random size)
 
@@ -72,7 +93,14 @@ To improve the variance, we can split our sequence in ramdomly sized halves each
 
 TODO image of two groups over time, changing size.
 
-TODO stats
+Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves have a random length between [25, 75].
+
+| Distance | Value | Normalized | Comment |
+|:---:|:---:|:---:|:---:|
+| min | 29 | 0.29 | good |
+| max | 168 | 1.68 | good |
+| avg | 100.01 | 1.00 | ideal |
+| std | 22.88 | 0.23 | good |
 
 ## Disjoint Shuffle
 
@@ -80,13 +108,27 @@ To improve the variance even further, I propose we interlace the groups a little
 
 TODO image of two disjoint group over time.
 
-TODO stats
+Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length, with the disjoint cut being random between 1 and 25 from the center.
+
+| Distance | Value | Normalized | Comment |
+|:---:|:---:|:---:|:---:|
+| min | 28 | 0.28 | good |
+| max | 174 | 1.74 | good |
+| avg | 100.01 | 1.00 | ideal |
+| std | 27.97 | 0.28 | good |
 
 ## Overlap Reshuffle
 
 An alternate solution to the same problem is to shuffle two halves, then shuffle an overlaping region over both halves. This however, comes at the penalty of having to shuffle the list completely before use. This algorithm is not iterative.
 
-TODO stats
+Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length, and the overlap covers 25 in each.
+
+| Distance | Value | Normalized | Comment |
+|:---:|:---:|:---:|:---:|
+| min | 26 | 0.26 | good |
+| max | 174 | 1.74 | good |
+| avg | 100.00 | 1.00 | ideal |
+| std | 27.09 | 0.27 | good |
 
 # References
 
