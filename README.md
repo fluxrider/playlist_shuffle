@@ -13,6 +13,12 @@ Imagine you are listening to the songs of an album, and set it up such that the 
 
 This paper compares various ways of generating a shuffled looping sequence, measuring statistics on the distance between duplicate entries.
 
+# Related Works
+
+TODO check how VLC behaves
+
+TODO other open source players
+
 # Algorithms
 
 ## Stateless
@@ -20,6 +26,15 @@ This paper compares various ways of generating a shuffled looping sequence, meas
 One of the simplest algorithm to think about when generating the next entry in a sequence is to select it randomly, without keeping track of any states. This opens up the possibility that an item be seen an infinite amount of times in a row, or never be seen at all.
 
 The variance in the sequence is ideal, meaning the next entry is always a surprise.
+
+Distance statistics in a simulation with sequence size being 100, and looping 10,000 times.
+
+| Distance | Normalized | Value | Comment |
+|:---:|:---:|:---:|:---:|
+| min | 1 | 0.01 | Horrid |
+| max | 1020 | 10.20 | Horrid |
+| avg | 99.87 | 1.00  | Ideal |
+| std | 100.75 | 1.01 | Ideal |
 
 ## Shuffle
 
@@ -31,9 +46,13 @@ Note that the common algorithm for shuffling (Fisher-Yate) is iterative, so you 
 
 What becomes annoying are the looping boundaries, where an entry may be seen as soon as the next, or as far as a full pass.
 
+TODO stats
+
 ## In Order
 
 Let's compare our metrics with a sequence that loops, but isn't shuffled. Now the distance between each entry is ideal, but the variance is zero. In other words, listener knows which song will come next.
+
+TODO stats
 
 ## Two Shuffles
 
@@ -45,11 +64,15 @@ However, the variance is left to be desired. Over just one loop, the listener kn
 
 TODO image of two groups
 
+TODO stats
+
 ## Two Shuffles (random size)
 
 To improve the variance, we can split our sequence in ramdomly sized halves each loop.
 
 TODO image of two groups over time, changing size.
+
+TODO stats
 
 ## Disjoint Shuffle
 
@@ -57,9 +80,13 @@ To improve the variance even further, I propose we interlace the groups a little
 
 TODO image of two disjoint group over time.
 
+TODO stats
+
 ## Overlap Reshuffle
 
 An alternate solution to the same problem is to shuffle two halves, then shuffle an overlaping region over both halves. This however, comes at the penalty of having to shuffle the list completely before use. This algorithm is not iterative.
+
+TODO stats
 
 # References
 
