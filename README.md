@@ -73,11 +73,11 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 In an effort to improve the minimum distance between the same entries in our shuffled looping sequence, we can split it in halves. The entries of the first half will be seen, followed by the entries of the second half. Shuffling is per halves, so the minimum distance between two entries is now half the size of the sequence.
 
+![Sequence split in two](https://github.com/fluxrider/disjoint_shuffle/raw/master/split.png "Sequence split in two")
+
 This is fairly straightforward, and does not require much more computation per entry.
 
 However, the variance is left to be desired. Over just one loop, the listener knows which songs are in which group and is well informed on what cannot possibly play next.
-
-![Sequence split in two](https://github.com/fluxrider/disjoint_shuffle/raw/master/split.png "Sequence split in two")
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length.
 
@@ -105,12 +105,12 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## Disjoint Shuffle
 
-To improve the variance even further, I propose we interlace the groups a little bit. The shuffle of an half is a bit more complex to implement now that its entries are disjoint in space, but the overall cost of computing the next entry in the sequence is still marginal.
+To improve the variance even further, I propose we interlace the groups a little bit. The shuffle of a half is a bit more complex to implement now that its entries are disjoint in space, but the overall cost of computing the next entry in the sequence is still marginal.
+
+![Sequence split in half with random interlace size](https://github.com/fluxrider/disjoint_shuffle/raw/master/disjoint.png "Sequence split in half with random interlace size")
 
 The idea is that the interlacing makes it harder to track in which group a given entry is.
 TODO this is a gut statement without any backing.
-
-![Sequence split in half with random interlace size](https://github.com/fluxrider/disjoint_shuffle/raw/master/disjoint.png "Sequence split in half with random interlace size")
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length, with the disjoint cut being random between 1 and 25 from the center.
 
