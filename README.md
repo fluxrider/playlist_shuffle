@@ -2,7 +2,6 @@ Disjoint Shuffle in a Looping Sequence
 =====
 © 2018 David Lareau, Independent Scientist
 
-
 # Abstract
 
 This paper proposes a novel approach at shuffling a looping sequence that minimizes caveats of naive solutions, keeps computation low, and offers a high degree of variance.
@@ -78,7 +77,7 @@ This is fairly straightforward, and does not require much more computation per e
 
 However, the variance is left to be desired. Over just one loop, the listener knows which songs are in which group and is well informed on what cannot possibly play next.
 
-TODO image of two groups
+![Sequence split in two](https://github.com/fluxrider/disjoint_shuffle/raw/master/split.png "Sequence split in two")
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length.
 
@@ -93,7 +92,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 To improve the variance, we can split our sequence in ramdomly sized halves each loop. This way, entries can travel across over multiple pass.
 
-TODO image of two groups over time, changing size.
+![Sequence split at random points](https://github.com/fluxrider/disjoint_shuffle/raw/master/split_r.png "Sequence split at random points")
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves have a random length between [25, 75].
 
@@ -111,7 +110,7 @@ To improve the variance even further, I propose we interlace the groups a little
 The idea is that the interlacing makes it harder to track in which group a given entry is.
 TODO this is a gut statement without any backing.
 
-TODO image of two disjoint group over time.
+![Sequence split in half with random interlace size](https://github.com/fluxrider/disjoint_shuffle/raw/master/disjoint.png "Sequence split in half with random interlace size")
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length, with the disjoint cut being random between 1 and 25 from the center.
 
@@ -125,6 +124,8 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 ## Overlap Reshuffle
 
 An alternate solution to the same problem is to shuffle two halves, then shuffle an overlaping region over both halves. This however, comes at the penalty of having to shuffle the list completely before use. This algorithm is not iterative.
+
+![Split sequence re-shuffled in center](https://github.com/fluxrider/disjoint_shuffle/raw/master/overlap.png "Split sequence re-shuffled in center")
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length, and the overlap covers 25 in each.
 

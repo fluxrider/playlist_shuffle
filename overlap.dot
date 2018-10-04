@@ -1,0 +1,7 @@
+digraph {
+  node[shape=record]
+  rankdir=LR
+  split [label="{ _A_ | _B_ }"]
+  over [label="{ | _C_ | }"]
+  split -> over
+}
