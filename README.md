@@ -1,7 +1,7 @@
 Disjoint Shuffle in a Looping Sequence
 =====
-David Lareau © 2018
-No Affiliations
+© 2018 David Lareau, Independent Scientist
+
 
 # Abstract
 
@@ -13,15 +13,11 @@ Imagine you are listening to the songs of an album, and set it up such that the 
 
 This paper compares various ways of generating a shuffled looping sequence, measuring statistics on the distance between duplicate entries.
 
-TODO motivation: cycling through a small amount of sound on pickup
-
 TODO degenerate case 0, 1, 2, 3, 4 long sequence. When does it start making sense to use disjoint shuffle.
 
 # Related Works
 
-TODO check how VLC behaves
-
-TODO other open source players
+In VLC Media Player 3.0.4 on Linux, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row.
 
 # Algorithms
 
@@ -55,7 +51,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 | Distance | Value | Normalized | Comment |
 |:---:|:---:|:---:|:---:|
 | min | 2 | 0.02 | horrid |
-| max | 199 | 1.99 | good (isn't that a bit far? how far is acceptable) |
+| max | 199 | 1.99 | horrid |
 | avg | 100.01 | 1.00 | ideal |
 | std | 40.41 | 0.40 | ideal |
 

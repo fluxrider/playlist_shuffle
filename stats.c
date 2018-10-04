@@ -89,15 +89,15 @@ int main(int argc, char * argv[]) {
   if(min > .9 && min < 1.1) judge_min = "ideal";
   // taking more than 2 runs is horrible
   // having the same element too close in a row is horrid too
-  else if(min > 2 || min < .1) judge_min = "horrid";
+  else if(min > 1.9 || min < .1) judge_min = "horrid";
   else judge_min = "good";
   // max has the same logic
   if(max > .9 && max < 1.1) judge_max = "ideal";
-  else if(max > 2 || max < .1) judge_max = "horrid";
+  else if(max > 1.9 || max < .1) judge_max = "horrid";
   else judge_max = "good";
   // avg has the same logic
   if(avg > .9 && avg < 1.1) judge_avg = "ideal";
-  else if(avg > 2 || avg < .1) judge_avg = "horrid";
+  else if(avg > 1.9 || avg < .1) judge_avg = "horrid";
   else judge_avg = "good";
   // a zero stddev means its the same sequence over and over, that's bad
   if(std <= 0.05) judge_std = "horrid";
