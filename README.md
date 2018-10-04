@@ -17,7 +17,9 @@ TODO degenerate case 0, 1, 2, 3, 4 long sequence. When does it start making sens
 
 # Related Works
 
-In VLC Media Player 3.0.4 on Linux, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row.
+The algorithms described in this paper are all from the top of my head. TODO is there a better way to say that I have no clue if there is literature about any of this, considering how trivial they all are?
+
+In VLC Media Player 3.0.4 on a Linux desktop, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row.
 
 # Algorithms
 
