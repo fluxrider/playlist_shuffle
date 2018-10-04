@@ -16,9 +16,9 @@ TODO degenerate case 0, 1, 2, 3, 4 long sequence. When does it start making sens
 
 # Related Works
 
-The algorithms described in this paper are all from the top of my head. TODO is there a better way to say that I have no clue if there is literature about any of this, considering how trivial they all are?
+The algorithms described in this paper are presented to build-up to the less intuitive **Disjoint Shuffle**. The literature doesn't seem to cover shuffling looping sequence, so I chose names for each algorithms.
 
-In VLC Media Player 3.0.4 on a Linux desktop, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row.
+In the wild, it is common for music players to have a *Random* or *Shuffle* feature. In VLC Media Player [1] 3.0.4 on a Linux desktop, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row at the looping boundaries.
 
 # Algorithms
 
@@ -49,7 +49,7 @@ An improvement over the stateless method, is to keep the sequence shuffled in me
 
 At the cost of memory, we now avoid the embarassing flaws of the stateless approach. All entries will be seen, and only once per full pass. The variance is much lower than the stateless approach because of these restrictions, but it's still ideal given the compromise.
 
-Note that the common algorithm for shuffling (Fisher-Yate) is iterative, so you do not need to shuffle the whole list prior of reading the next entry. You can perform the shuffle one item at a time, meaning the size of the sequence does not affect the computation.
+Note that the common algorithm for shuffling (Fisher-Yate [2]) is iterative, so you do not need to shuffle the whole list prior of reading the next entry. You can perform the shuffle one item at a time, meaning the size of the sequence does not affect the computation.
 
 What becomes annoying are the looping boundaries, where an entry may be seen as soon as the next, or as far as a full pass.
 
@@ -172,4 +172,5 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 # References
 
-Fisher-Yate Shuffle
+[1] VLC Media Player
+[2] Fisher-Yate Shuffle
