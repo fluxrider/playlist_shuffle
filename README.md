@@ -28,6 +28,12 @@ One of the simplest algorithm to think about when generating the next entry in a
 
 The variance in the sequence is ideal, meaning the next entry is always a surprise.
 
+```C
+uint32_t next() {
+  return arc4random_uniform(n);
+}
+```
+
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times.
 
 | Distance | Value | Normalized | Comment |
@@ -47,6 +53,15 @@ Note that the common algorithm for shuffling (Fisher-Yate) is iterative, so you 
 
 What becomes annoying are the looping boundaries, where an entry may be seen as soon as the next, or as far as a full pass.
 
+```C
+uint32_t next() {
+  if(i == n) i = 0;
+  uint32_t j = i + arc4random_uniform(n - i);
+  swap(i, j);
+  return t[i++];
+}
+```
+
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times.
 
 | Distance | Value | Normalized | Comment |
@@ -59,6 +74,13 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 ## In Order
 
 Let's compare our metrics with a sequence that loops, but isn't shuffled. Now the distance between each entry is ideal, but the variance is zero. In other words, listener knows which song will come next.
+
+```C
+uint32_t next() {
+  if(i == n) i = 0;
+  return t[i++];
+}
+```
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times.
 
@@ -105,11 +127,11 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## Disjoint Shuffle
 
-To improve the variance even further, I propose we interlace the groups a little bit. The shuffle of a half is a bit more complex to implement now that its entries are disjoint in space, but the overall cost of computing the next entry in the sequence is still marginal.
+To improve the variance even further, I propose we interlace the halves a little bit. The shuffle of a half is a bit more complex to implement now that its entries are disjoint in space, but the overall cost of computing the next entry in the sequence is still marginal.
 
 ![Sequence split in half with random interlace size](https://github.com/fluxrider/disjoint_shuffle/raw/master/disjoint.png "Sequence split in half with random interlace size")
 
-The idea is that the interlacing makes it harder to track in which group a given entry is.
+The idea is that the interlacing makes it harder to track in which half a given entry is.
 TODO this is a gut statement without any backing.
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length, with the disjoint cut being random between 1 and 25 from the center.
@@ -126,6 +148,18 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 An alternate solution to the same problem is to shuffle two halves, then shuffle an overlaping region over both halves. This however, comes at the penalty of having to shuffle the list completely before use. This algorithm is not iterative.
 
 ![Split sequence re-shuffled in center](https://github.com/fluxrider/disjoint_shuffle/raw/master/overlap.png "Split sequence re-shuffled in center")
+
+```C
+uint32_t next() {
+  if(i == n) i = 0;
+  if(i == 0) {
+    shuffle(0, n / 2);
+    shuffle(n / 2, n);
+    shuffle(n / 4, 3 * n / 4);
+  }
+  return t[i++];
+}
+```
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length, and the overlap covers 25 in each.
 
