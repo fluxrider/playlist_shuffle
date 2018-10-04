@@ -13,6 +13,10 @@ Imagine you are listening to the songs of an album, and set it up such that the 
 
 This paper compares various ways of generating a shuffled looping sequence, measuring statistics on the distance between duplicate entries.
 
+TODO motivation: cycling through a small amount of sound on pickup
+
+TODO degenerate case 0, 1, 2, 3, 4 long sequence. When does it start making sense to use disjoint shuffle.
+
 # Related Works
 
 TODO check how VLC behaves
@@ -51,7 +55,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 | Distance | Value | Normalized | Comment |
 |:---:|:---:|:---:|:---:|
 | min | 2 | 0.02 | horrid |
-| max | 199 | 1.99 | good |
+| max | 199 | 1.99 | good (isn't that a bit far? how far is acceptable) |
 | avg | 100.01 | 1.00 | ideal |
 | std | 40.41 | 0.40 | ideal |
 
@@ -74,7 +78,7 @@ In an effort to improve the minimum distance between the same entries in our shu
 
 This is fairly straightforward, and does not require much more computation per entry.
 
-However, the variance is left to be desired. Over just one loop, the listener knows which songs are in which group and his well informed on what cannot possibly play next.
+However, the variance is left to be desired. Over just one loop, the listener knows which songs are in which group and is well informed on what cannot possibly play next.
 
 TODO image of two groups
 
@@ -89,7 +93,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## Two Shuffles (random size)
 
-To improve the variance, we can split our sequence in ramdomly sized halves each loop.
+To improve the variance, we can split our sequence in ramdomly sized halves each loop. This way, entries can travel across over multiple pass.
 
 TODO image of two groups over time, changing size.
 
@@ -105,6 +109,9 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 ## Disjoint Shuffle
 
 To improve the variance even further, I propose we interlace the groups a little bit. The shuffle of an half is a bit more complex to implement now that its entries are disjoint in space, but the overall cost of computing the next entry in the sequence is still marginal.
+
+The idea is that the interlacing makes it harder to track in which group a given entry is.
+TODO this is a gut statement without any backing.
 
 TODO image of two disjoint group over time.
 
