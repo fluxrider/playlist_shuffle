@@ -144,7 +144,7 @@ To improve the variance even further, I propose we interlace the halves a little
 The idea is that the interlacing makes it harder to track in which half a given entry is.
 TODO this is a gut statement without any backing.
 
-In order to verify that the implementation of this algorithm is sound, one would need to control the random interlace size. The test file verify.c does this and checks that the two groups are shuffled without bias. TODO write verify.c
+In order to verify that the implementation of this algorithm is sound, one would need to know the random interlace size in each pass. The test file verify.c does this and checks that the two groups are shuffled without bias.
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length, with the disjoint cut being random between 1 and 25 from the center.
 
