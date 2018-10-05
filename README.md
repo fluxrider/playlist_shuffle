@@ -188,6 +188,18 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 | avg | 100.00 | 1.00 | ideal |
 | std | 27.09 | 0.27 | good |
 
+# GitHub
+
+I'm putting this paper on GitHub for multiple reasons.
+- It's free access.
+- Reviews are not limited in time.
+- Reviews are not forced on anyone.
+- Reviewers are recognized (at least in form of committer, on in issue discussion threads).
+
+If you just want to contribute polish, keep in mind I value automation much more than results. If you think my diagrams are ugly, fix the graphviz dot file (or replace it with something else) not just the generated png.
+
+The paper itself, README.md, is not generated at this time, mostly because I'm not sure what would be better yet. You may notice sections are not numbered, because I don't want to manage that manually. It feels especially silly to have to copy code section instead of being able to include them in, considering I can include images. Tracking references manually is also a pain.
+
 # References
 
 [1] [VLC Media Player](https://www.videolan.org/)
