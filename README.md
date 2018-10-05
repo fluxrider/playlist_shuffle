@@ -16,7 +16,13 @@ This paper compares various ways of generating a shuffled looping sequence, meas
 
 Even for a sequence as small as 2 items, it becomes important to use a smart algorithm to avoid having two items in a row. Most of the algorithm described in this paper split the sequence in groups. Care must be taken when choosing the size of the groups such that a small sequence doesn't break the algorithm's goals.
 
+## Music
+
 The context example of a music album (~12 songs) being played in a loop is not as contemporary as it used to be. This paper disregard that an easy way out of the problem is to add more songs, such that the shuffled sequence never needs to loop in one listening session.
+
+The music playlist example is easy to picture, but it is not the actual problem I'm trying to solve. The problem is how to repeatedly shuffle a cyclic list and avoid *too close* and *too far* duplicates. Solutions involving spreading music genre uniformly [4] have nothing to do with this problem.
+
+An alternative cyclic sequence example is spawning a random fruit in a video game for the player to pick up, then spawn another one when they do. You can also play random banter each time too.
 
 ## Related Works
 
@@ -189,3 +195,5 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 [2] [Fisher-Yate Shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle)
 
 [3] [java.util.Collections.shuffle()](https://docs.oracle.com/javase/9/docs/api/java/util/Collections.html#shuffle-java.util.List-)
+
+[4] [How random is random on your music player? Dave Lee, BBC News. 2015-02-19](https://www.bbc.com/news/technology-31302312)
