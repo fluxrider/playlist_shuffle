@@ -1,4 +1,4 @@
-// gcc verify.c
+// gcc verify.c -lbsd
 
 #include <stdint.h>
 #include <stdio.h>
