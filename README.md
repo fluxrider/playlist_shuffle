@@ -81,7 +81,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## In Order
 
-Let's compare our metrics with a sequence that loops, but isn't shuffled. Now the distance between each entry is ideal, but the variance is zero. In other words, listener knows which song will come next.
+Let's compare our metrics with a sequence that loops, but isn't shuffled. Now the distance between each entry is ideal, but the variance is zero. In other words, the listener knows which song will come next.
 
 ```C
 uint32_t next() {
@@ -103,7 +103,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 In an effort to improve the minimum distance between the same entries in our shuffled looping sequence, we can split it in halves. The entries of the first half will be seen, followed by the entries of the second half. Shuffling is per halves, so the minimum distance between two entries is now half the total size of the sequence.
 
-![Sequence split in two](https://github.com/fluxrider/disjoint_shuffle/raw/master/split.png "Sequence split in two")
+![Sequence split in two](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/split.png "Sequence split in two")
 
 This is fairly straightforward, and does not require much more computation per entry. However, the variance is left to be desired. Over just one loop, the listener knows which songs are in which group and is well informed on what cannot possibly play next.
 
@@ -122,7 +122,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 To improve the variance, we can split our sequence in ramdomly sized halves each loop. This way, entries can travel across over multiple pass.
 
-![Sequence split at random points](https://github.com/fluxrider/disjoint_shuffle/raw/master/split_r.png "Sequence split at random points")
+![Sequence split at random points](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/split_r.png "Sequence split at random points")
 
 The halfpoint is now random, so in order to verify that the implementation of this algorithm is correct, one would need to control this random number.
 
@@ -139,7 +139,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 To improve the variance even further, I propose we interlace the halves a little bit. The shuffle of a half is a bit more complex to implement now that its entries are disjoint in space, but the overall cost of computing the next entry in the sequence is still marginal.
 
-![Sequence split in half with random interlace size](https://github.com/fluxrider/disjoint_shuffle/raw/master/disjoint.png "Sequence split in half with random interlace size")
+![Sequence split in half with random interlace size](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/disjoint.png "Sequence split in half with random interlace size")
 
 The idea is that the interlacing makes it harder to track in which half a given entry is.
 TODO this is a gut statement without any backing.
@@ -159,7 +159,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 An alternate solution to the same problem is to shuffle two halves, then shuffle an overlaping region over both halves. This however, comes at the penalty of having to shuffle the list completely before use. This algorithm is not iterative.
 
-![Split sequence re-shuffled in center](https://github.com/fluxrider/disjoint_shuffle/raw/master/overlap.png "Split sequence re-shuffled in center")
+![Split sequence re-shuffled in center](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/overlap.png "Split sequence re-shuffled in center")
 
 ```C
 uint32_t next() {
@@ -184,5 +184,6 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 # References
 
-[1] VLC Media Player
-[2] Fisher-Yate Shuffle
+[1] [VLC Media Player](https://www.videolan.org/)
+
+[2] [Fisher-Yate Shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle)
