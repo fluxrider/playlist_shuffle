@@ -14,11 +14,9 @@ This paper compares various ways of generating a shuffled looping sequence, meas
 
 ## Degenerate Cases
 
-Even for a sequence as small as 2 items, it becomes important to use a smart algorithm to avoid having two items in a row.
+Even for a sequence as small as 2 items, it becomes important to use a smart algorithm to avoid having two items in a row. Most of the algorithm described in this paper split the sequence in groups. Care must be taken when choosing the size of the groups such that a small sequence doesn't break the algorithm's goals.
 
-TODO When does disjoint shuffle becomes better than split or split_r?
-
-The example of a music album (~12 songs) being played in a loop is not as contemporary as it used to be. This paper disregard that an easy way out of the problem is to add more songs, such that the shuffled sequence never needs to loop in one listening session.
+The context example of a music album (~12 songs) being played in a loop is not as contemporary as it used to be. This paper disregard that an easy way out of the problem is to add more songs, such that the shuffled sequence never needs to loop in one listening session.
 
 ## Related Works
 
