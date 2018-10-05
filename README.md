@@ -159,6 +159,8 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 An alternate solution to the same problem is to shuffle two halves, then shuffle an overlaping region over both halves. This however, comes at the penalty of having to shuffle the list completely before use. This algorithm is not iterative.
 
+Though shuffling the whole sequence before reading samples is quite silly in any context, unless you know for certain that you will require all samples, it is sadly how libraries are designed [3].
+
 ![Split sequence re-shuffled in center](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/overlap.png "Split sequence re-shuffled in center")
 
 ```C
@@ -187,3 +189,5 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 [1] [VLC Media Player](https://www.videolan.org/)
 
 [2] [Fisher-Yate Shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle)
+
+[3] [java.util.Collections.shuffle()](https://docs.oracle.com/javase/9/docs/api/java/util/Collections.html#shuffle-java.util.List-)
