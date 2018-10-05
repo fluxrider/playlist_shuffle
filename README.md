@@ -12,13 +12,21 @@ Imagine you are listening to the songs of an album, and set it up such that the 
 
 This paper compares various ways of generating a shuffled looping sequence, measuring statistics on the distance between duplicate entries.
 
-TODO degenerate case 0, 1, 2, 3, 4 long sequence. When does it start making sense to use disjoint shuffle.
+## Degenerate Cases
 
-# Related Works
+Even for a sequence as small as 2 items, it becomes important to use a smart algorithm to avoid having two items in a row.
+
+TODO When does disjoint shuffle becomes better than split or split_r?
+
+The example of a music album (~12 songs) being played in a loop is not as contemporary as it used to be. This paper disregard that an easy way out of the problem is to add more songs, such that the shuffled sequence never needs to loop in one listening session.
+
+## Related Works
 
 The algorithms described in this paper are presented to build-up to the less intuitive **Disjoint Shuffle**. The literature doesn't seem to cover shuffling looping sequence, so I chose names for each algorithms.
 
 In the wild, it is common for music players to have a *Random* or *Shuffle* feature. In VLC Media Player [1] 3.0.4 on a Linux desktop, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row at the looping boundaries.
+
+TODO look at more players out there.
 
 # Algorithms
 
@@ -93,13 +101,13 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## Two Shuffles
 
-In an effort to improve the minimum distance between the same entries in our shuffled looping sequence, we can split it in halves. The entries of the first half will be seen, followed by the entries of the second half. Shuffling is per halves, so the minimum distance between two entries is now half the size of the sequence.
+In an effort to improve the minimum distance between the same entries in our shuffled looping sequence, we can split it in halves. The entries of the first half will be seen, followed by the entries of the second half. Shuffling is per halves, so the minimum distance between two entries is now half the total size of the sequence.
 
 ![Sequence split in two](https://github.com/fluxrider/disjoint_shuffle/raw/master/split.png "Sequence split in two")
 
-This is fairly straightforward, and does not require much more computation per entry.
+This is fairly straightforward, and does not require much more computation per entry. However, the variance is left to be desired. Over just one loop, the listener knows which songs are in which group and is well informed on what cannot possibly play next.
 
-However, the variance is left to be desired. Over just one loop, the listener knows which songs are in which group and is well informed on what cannot possibly play next.
+The shuffle is now biased, so it becomes harder to verify that the implementation of this algorith is correct. You would need to verify that each half has been shuffle correctly without bias.
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length.
 
@@ -115,6 +123,8 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 To improve the variance, we can split our sequence in ramdomly sized halves each loop. This way, entries can travel across over multiple pass.
 
 ![Sequence split at random points](https://github.com/fluxrider/disjoint_shuffle/raw/master/split_r.png "Sequence split at random points")
+
+The halfpoint is now random, so in order to verify that the implementation of this algorithm is correct, one would need to control this random number.
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves have a random length between [25, 75].
 
@@ -133,6 +143,8 @@ To improve the variance even further, I propose we interlace the halves a little
 
 The idea is that the interlacing makes it harder to track in which half a given entry is.
 TODO this is a gut statement without any backing.
+
+In order to verify that the implementation of this algorithm is sound, one would need to control the random interlace size. The test file verify.c does this and checks that the two groups are shuffled without bias. TODO write verify.c
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length, with the disjoint cut being random between 1 and 25 from the center.
 
