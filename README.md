@@ -30,7 +30,7 @@ The algorithms described in this paper are presented to build-up to the less int
 
 In the wild, it is common for music players to have a *Random* or *Shuffle* feature. In VLC Media Player [1] 3.0.4 on a Linux desktop, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row at the looping boundaries.
 
-At the time of writing, The Parole Media Player (xfce's player) prevents playing the same song twice in a row, and also tries not to play any of the last three songs heard (when possible). Aside from this small history, it is **stateless**.
+At the time of writing, The Parole Media Player (xfce's player) prevents playing the same song twice in a row, and also tries not to play any of the last three songs heard (when possible) [5]. Aside from this small history, it is **stateless**.
 
 TODO look at more players out there.
 
@@ -211,3 +211,5 @@ The paper itself, README.md, is not generated at this time, mostly because I'm n
 [3] [java.util.Collections.shuffle()](https://docs.oracle.com/javase/9/docs/api/java/util/Collections.html#shuffle-java.util.List-)
 
 [4] [How random is random on your music player? Dave Lee, BBC News. 2015-02-19](https://www.bbc.com/news/technology-31302312)
+
+[5] [Parole Media Player Shuffle Algorithm](https://github.com/xfce-mirror/parole/blob/4d6b9e46f214606bcf1495e0dcb689acea527d90/src/parole-medialist.c#L1723-L1731)
