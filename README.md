@@ -190,6 +190,12 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 | avg | 100.00 | 1.00 | ideal |
 | std | 27.09 | 0.27 | good |
 
+# Conclusion
+
+The algorithms described in this paper are nothing to brag about, but it seems the media players I've tried put little thoughts when implementing their loop/shuffle feature. TODO I have to try a lot more players to make this claim.
+
+Though I'm proposing the **Disjoint Shuffle** algorithm, I'd be happy if at least the **Split** algorithm would be used more pervasively. The **Overlap** algorithm less so because it is not iterative.
+
 # GitHub
 
 I'm putting this paper on GitHub for multiple reasons.
