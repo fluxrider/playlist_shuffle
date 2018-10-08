@@ -16,14 +16,6 @@ This paper compares various ways of generating a shuffled looping sequence, meas
 
 Even for a sequence as small as 2 items, it becomes important to use a smart algorithm to avoid having two items in a row. Most of the algorithm described in this paper split the sequence in groups. Care must be taken when choosing the size of the groups such that a small sequence doesn't break the algorithm's goals.
 
-## Music
-
-The context example of a music album (~12 songs) being played in a loop is not as contemporary as it used to be. This paper disregard that an easy way out of the problem is to add more songs, such that the shuffled sequence never needs to loop in one listening session.
-
-The music playlist example is easy to picture, but it is not the actual problem I'm trying to solve. The problem is how to repeatedly shuffle a cyclic list and avoid *too close* and *too far* duplicates. Solutions involving spreading music genre uniformly [4] have nothing to do with this problem.
-
-An alternative cyclic sequence example is spawning a random fruit in a video game for the player to pick up, then spawn another one when they do. You can also play random banter each time too.
-
 ## Related Works
 
 The algorithms described in this paper are presented to build-up to the less intuitive **Disjoint Shuffle**. The literature doesn't seem to cover shuffling looping sequence, so I chose names for each algorithms.
@@ -32,7 +24,15 @@ In the wild, it is common for music players to have a *Random* or *Shuffle* feat
 
 At the time of writing, The Parole Media Player (xfce's player) prevents playing the same song twice in a row, and also tries not to play any of the last three songs heard (when possible) [5]. Aside from this small history, it is **stateless**.
 
-TODO look at more players out there.
+Rhythmbox 3.4.2, a Gnome player, seems to be using a **stateless** algorithm as well, as I could hear the same song multiple times before every song was heard in the sequence.
+
+## Music
+
+The context example of a music album (~12 songs) being played in a loop is not as contemporary as it used to be. This paper disregard that an easy way out of the problem is to add more songs, such that the shuffled sequence never needs to loop in one listening session.
+
+The music playlist example is easy to picture and test in the wild, but it is not the actual problem I'm trying to solve. The problem is how to repeatedly shuffle a cyclic list and avoid *too close* and *too far* duplicates. Solutions involving spreading music genre uniformly [4] have nothing to do with this problem. Using played count history is also unaplicable.
+
+An alternative cyclic sequence example is spawning a random fruit in a video game for the player to pick up, then spawn another one when they do. You can also play random banter each time too.
 
 # Algorithms
 
