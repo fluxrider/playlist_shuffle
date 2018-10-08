@@ -30,6 +30,8 @@ The algorithms described in this paper are presented to build-up to the less int
 
 In the wild, it is common for music players to have a *Random* or *Shuffle* feature. In VLC Media Player [1] 3.0.4 on a Linux desktop, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row at the looping boundaries.
 
+At the time of writing, The Parole Media Player (xfce's player) prevents playing the same song twice in a row, and also tries not to play any of the last three songs heard (when possible). Aside from this small history, it is **stateless**.
+
 TODO look at more players out there.
 
 # Algorithms
