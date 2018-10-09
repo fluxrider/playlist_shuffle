@@ -1,6 +1,6 @@
 Disjoint Shuffle in a Looping Sequence
 =====
-© 2018 David Lareau, Independent Scientist
+© 2018 David Lareau, Independent Scientist, Canada
 
 # Abstract
 
@@ -18,27 +18,29 @@ Even for a sequence as small as 2 items, it becomes important to use a smart alg
 
 ## Related Works
 
-The algorithms described in this paper are presented to build-up to the less intuitive **Disjoint Shuffle**. The literature doesn't seem to cover shuffling looping sequence, so I chose names for each algorithms.
+The algorithms described in this paper are presented to build-up to the less intuitive **Disjoint Shuffle**. The literature doesn't seem to cover shuffling looping sequence, so I designed and chose names for each algorithms.
 
-In the wild, it is common for music players to have a *Random* or *Shuffle* feature. In VLC Media Player [1] 3.0.4 on a Linux desktop, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row at the looping boundaries.
+In the wild, it is common for music players to have a *Random* or *Shuffle* feature. In VLC Media Player [1] 3.0.4 on the desktop, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row at the looping boundaries.
 
-At the time of writing, The Parole Media Player (xfce's player) prevents playing the same song twice in a row, and also tries not to play any of the last three songs heard (when possible) [5]. Aside from this small history, it is **stateless**.
+Parole Media Player 1.0.1 (xfce's player) prevents playing the same song twice in a row, and also tries not to play any of the last three songs heard (when possible) [5]. Aside from this small history, it is **stateless**. This behaviour would be hard to infer without the source code. Rhythmbox 3.4.2, a Gnome player, seems to be using a **stateless** algorithm as well, as I could hear the same song multiple times before every song was heard in the sequence.
 
-Rhythmbox 3.4.2, a Gnome player, seems to be using a **stateless** algorithm as well, as I could hear the same song multiple times before every song was heard in the sequence.
+Both Windows Media Player 12.0.16299.248 and iTunes 12.3.2.35 go over all songs once before going over the sequence again, and both prevent the same song to be played twice in a row. However, at the sequence looping boundaries, it is possible to hear the same song again if at least one other song has been played in between (i.e. minimum distance is 2).
 
 ## Music
 
 The context example of a music album (~12 songs) being played in a loop is not as contemporary as it used to be. This paper disregard that an easy way out of the problem is to add more songs, such that the shuffled sequence never needs to loop in one listening session.
 
-The music playlist example is easy to picture and test in the wild, but it is not the actual problem I'm trying to solve. The problem is how to repeatedly shuffle a cyclic list and avoid *too close* and *too far* duplicates. Solutions involving spreading music genre uniformly [4] have nothing to do with this problem. Using played count history is also unaplicable.
+The music playlist example is easy to picture and fun to test in the wild, but it is not the actual problem I'm trying to solve. The problem is how to repeatedly shuffle a cyclic list and avoid *too close* and *too far* duplicates. Solutions involving spreading music genre uniformly [4] have nothing to do with this problem. Using played count history is also unaplicable.
 
-An alternative cyclic sequence example is spawning a random fruit in a video game for the player to pick up, then spawn another one when they do. You can also play random banter each time too.
+A different example of a cyclic sequence could be spawning a random fruit in a video game for the player to pick up, then spawn another one when they do. It would be annoying to see 3 bananas in a row, or never see a cherry.
 
 # Algorithms
 
 ## Stateless
 
 One of the simplest algorithm to think about when generating the next entry in a sequence is to select it randomly, without keeping track of any states. This opens up the possibility that an item be seen an infinite amount of times in a row, or never be seen at all.
+
+As mentionned in *Related Works*, this is how Parole Media Player, and Rhythmbox mostly behave.
 
 The variance in the sequence is ideal, meaning the next entry is always a surprise.
 
@@ -65,7 +67,11 @@ At the cost of memory, we now avoid the embarassing flaws of the stateless appro
 
 Note that the common algorithm for shuffling (Fisher-Yate [2]) is iterative, so you do not need to shuffle the whole list prior of reading the next entry. You can perform the shuffle one item at a time, meaning the size of the sequence does not affect the computation.
 
+The memory cost is not a real problem, considering the entries have to be stored somewhere anyway, and that the algorithm can be done in-place.
+
 What becomes annoying are the looping boundaries, where an entry may be seen as soon as the next, or as far as a full pass.
+
+As mentionned in *Related Works*, this is how VLC, Windows Media Player and iTunes mostly work, sometime with a quick hack to prevent the same song twice in a row, but nothing more.
 
 ```C
 uint32_t next() {
@@ -80,10 +86,10 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 | Distance | Value | Normalized | Comment |
 |:---:|:---:|:---:|:---:|
-| min | 2 | 0.02 | horrid |
+| min | 1 | 0.01 | horrid |
 | max | 199 | 1.99 | horrid |
 | avg | 100.01 | 1.00 | ideal |
-| std | 40.41 | 0.40 | ideal |
+| std | 40.88 | 0.41 | ideal |
 
 ## In Order
 
@@ -111,9 +117,13 @@ In an effort to improve the minimum distance between the same entries in our shu
 
 ![Sequence split in two](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/split.png "Sequence split in two")
 
-This is fairly straightforward, and does not require much more computation per entry. However, the variance is left to be desired. Over just one loop, the listener knows which songs are in which group and is well informed on what cannot possibly play next.
+In other words, you now have two sequences, which play one after another. There is no way the same song can be heard twice in a row anymore, since you need to at least visit all the entries of the other sequence before seeing it again.
 
-The shuffle is now biased, so it becomes harder to verify that the implementation of this algorith is correct. You would need to verify that each half has been shuffle correctly without bias.
+This solution is quite easy to implement, gives good enough results, and in all honesty, if it was prevalent, I wouldn't be writing a paper about this.
+
+The variance is left to be desired of course. Over just one loop, the listener knows which songs are in which group and is well informed on what cannot possibly play next.
+
+The shuffle is now biased, so it becomes slightly harder to verify that the implementation of this algorith is correct. You would need to verify that each half has been shuffle correctly without bias.
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length.
 
@@ -126,7 +136,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## Two Shuffles (random size)
 
-To improve the variance, we can split our sequence in ramdomly sized halves each loop. This way, entries can travel across over multiple pass.
+To improve the variance a little bit, we can split our sequence in ramdomly sized halves each loop. This way, entries can travel across over multiple pass.
 
 ![Sequence split at random points](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/split_r.png "Sequence split at random points")
 
@@ -143,14 +153,16 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## Disjoint Shuffle
 
-To improve the variance even further, I propose we interlace the halves a little bit. The shuffle of a half is a bit more complex to implement now that its entries are disjoint in space, but the overall cost of computing the next entry in the sequence is still marginal.
+To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other. If the random size is 0, then the pass is equivalent to the **Split** shuffle described earlier.
 
 ![Sequence split in half with random interlace size](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/disjoint.png "Sequence split in half with random interlace size")
 
-The idea is that the interlacing makes it harder to track in which half a given entry is.
-TODO this is a gut statement without any backing.
+The increase of variance is a bit of a hack, since we jump over a gap to consider positions further down the sequence. This makes the distance metric higher, but that's really because we are disregarding values in the gap.
 
-In order to verify that the implementation of this algorithm is sound, one would need to know the random interlace size in each pass. The test file verify.c does this and checks that the two groups are shuffled without bias.
+The idea is that the interlacing makes it harder for a human to track the entries mentally.
+This is the weak statement of the paper, as I have no backing for this claim.
+
+In order to verify that the implementation of this algorithm is sound, one needs to know the random interlace size in each pass. The test file verify.c does this and checks that the two groups are shuffled without bias.
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length, with the disjoint cut being random between 1 and 25 from the center.
 
@@ -165,7 +177,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 An alternate solution to the same problem is to shuffle two halves, then shuffle an overlaping region over both halves. This however, comes at the penalty of having to shuffle the list completely before use. This algorithm is not iterative.
 
-Though shuffling the whole sequence before reading samples is quite silly in any context, it is sadly how code libraries are designed [3]. A playing card dealer does not need to shuffle the whole deck if it can simply pick five cards out randomly (as computers can do).
+Though shuffling the whole sequence before reading samples is quite silly in any context, it is sadly how code libraries are designed [3]. A playing card dealer does not need to shuffle the whole deck if it can simply pick five cards out randomly (as computers can do). Shuffling ahead of time is a human thing.
 
 ![Split sequence re-shuffled in center](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/overlap.png "Split sequence re-shuffled in center")
 
@@ -192,9 +204,9 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 # Conclusion
 
-The algorithms described in this paper are nothing to brag about, but it seems the media players I've tried put little thoughts when implementing their loop/shuffle feature. TODO I have to try a lot more players to make this claim.
+The algorithms described in this paper are nothing to brag about, but the media players I've tried put little thoughts when implementing their loop/shuffle feature. Simply preventing that a song be heard twice in a row, but not preventing much more than that feels cheap.
 
-Though I'm proposing the **Disjoint Shuffle** algorithm, I'd be happy if at least the **Split** algorithm would be used more pervasively. The **Overlap** algorithm less so because it is not iterative.
+Though I'm proposing the **Disjoint Shuffle** algorithm, I'd be happy if at least the **Split** algorithm would be used more pervasively. The **Overlap** algorithm is much easier to implement than the disjoint one, and players like iTunes pre-shuffle the sequence to show it to you, so that algorithm would be fine in those case too.
 
 # GitHub
 
@@ -203,10 +215,7 @@ I'm putting this paper on GitHub for multiple reasons.
 - Reviews are not limited in time.
 - Reviews are not forced on anyone.
 - Reviewers are recognized (at least in form of committer, on in issue discussion threads).
-
-If you just want to contribute polish, keep in mind I value automation much more than results. If you think my diagrams are ugly, fix the graphviz dot file (or replace it with something else) not just the generated png.
-
-The paper itself, README.md, is not generated at this time, mostly because I'm not sure what would be better yet. You may notice sections are not numbered, because I don't want to manage that manually. It feels especially silly to have to copy code section instead of being able to include them in, considering I can include images. Tracking references manually is also a pain.
+- I can bless derivative work by adding links to them.
 
 # References
 
