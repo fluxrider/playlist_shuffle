@@ -18,7 +18,7 @@ Even for a sequence as small as 2 items, it becomes important to use a smart alg
 
 ## Related Work
 
-The algorithms described in this paper are presented to build-up to the less intuitive **Two Disjoint Shuffles**. The literature doesn't seem to cover shuffling looping sequence, so I designed and chose names for each algorithms.
+The algorithms described in this paper are presented to build-up to the less intuitive **Two Disjoint Shuffles**. The literature doesn't seem to cover shuffling looping sequence, so I designed and chose names for each algorithm.
 
 In the wild, it is common for music players to have a *Random* or *Shuffle* feature. In VLC Media Player [1] 3.0.4 on the desktop, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row at the looping boundaries.
 
@@ -123,7 +123,7 @@ This solution is quite easy to implement, gives good enough results, and in all 
 
 An implementation of this shuffle is available in [split.c](https://github.com/fluxrider/disjoint_shuffle/blob/master/src/split.c).
 
-The variance is left to be desired of course. Over just one loop, the listener knows which songs are in which group and is well informed on what cannot possibly play next.
+The variance is left to be desired of course. Over just one loop, the listener knows which songs are in which group and is well-informed on what cannot possibly play next.
 
 The shuffle is now biased, so it becomes slightly harder to verify that the implementation of this algorithm is correct. You would need to verify that each half has been shuffled correctly without bias.
 
@@ -138,13 +138,13 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## Two Shuffles (random size)
 
-To improve the variance a little bit, we can split our sequence in randomly sized halves each loop. This way, entries can travel across over multiple pass.
+To improve the variance a little, we can split our sequence in randomly sized halves each loop. This way, entries can travel across over multiple pass.
 
 ![Sequence split at random points](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/split_r.png "Sequence split at random points")
 
 An implementation of this shuffle is available in [split_r.c](https://github.com/fluxrider/disjoint_shuffle/blob/master/src/split_r.c).
 
-The halfpoint is now random, so in order to verify that the implementation of this algorithm is correct, one would need to control this random number.
+The half point is now random, so in order to verify that the implementation of this algorithm is correct, one would need to control this random number.
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves have a random length between [25, 75].
 
@@ -221,10 +221,10 @@ I'm putting this paper on GitHub for multiple reasons.
 - I can bless derivative work by adding links to them.
 
 Now keep in mind though reviews are:
-- welcomed.
-- not limited in time.
-- not forced on anyone.
-- recognized (at least in form of committer, on in issue discussion threads).
+- Welcomed.
+- Not limited in time.
+- Not forced on anyone.
+- Recognized (at least in form of committer, on in issue discussion threads).
 
 I'm still human and probably won't want to maintain this **casual paper** for the rest of my life. Be gentle. I'm scared that because the topic and implementations are easy to grasp, there will be too many reviews.
 
