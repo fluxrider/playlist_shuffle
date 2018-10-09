@@ -225,6 +225,7 @@ Now keep in mind though reviews are:
 - not limited in time.
 - not forced on anyone.
 - recognized (at least in form of committer, on in issue discussion threads).
+
 I'm still human and probably won't want to maintain this **casual paper** for the rest of my life. Be gentle. I'm scared that because the topic and implementations are easy to grasp, there will be too many reviews.
 
 # References
