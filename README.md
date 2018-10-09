@@ -161,7 +161,7 @@ To improve the variance even further, I propose we keep the halves the same size
 
 ![Sequence split in half with random interlace size](https://github.com/fluxrider/broken_shuffle/raw/master/res/broken.png "Sequence split in half with random interlace size")
 
-An implementation of this shuffle is available in [disjoint.c](https://github.com/fluxrider/broken_shuffle/blob/master/src/broken.c).
+An implementation of this shuffle is available in [broken.c](https://github.com/fluxrider/broken_shuffle/blob/master/src/broken.c).
 
 The increase of variance is a bit of a hack, since we jump over a gap to consider positions further down the sequence. This makes the distance metric higher, but that's really because we are disregarding values in the gap.
 
