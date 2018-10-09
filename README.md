@@ -22,15 +22,15 @@ The algorithms described in this paper are presented to build-up to the less int
 
 In the wild, it is common for music players to have a *Random* or *Shuffle* feature. In VLC Media Player [1] 3.0.4 on the desktop, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row at the looping boundaries.
 
-Parole Media Player 1.0.1 (xfce's player) prevents playing the same song twice in a row, and also tries not to play any of the last three songs heard (when possible) [5]. Aside from this small history, it is **stateless**. This behavior would be hard to infer without the source code. Rhythmbox 3.4.2, a Gnome player, seems to be using a **stateless** algorithm as well, as I could hear the same song multiple times before every song was heard in the sequence.
+Parole Media Player 1.0.1 (xfce's player) prevents playing the same song twice in a row, and also tries not to play any of the last three songs heard (when possible) [5]. Aside from this small history, it is **stateless**. This behavior would be hard to infer without the source code. Rhythmbox [6] 3.4.2, a Gnome player, seems to be using a **stateless** algorithm as well, as I could hear the same song multiple times before every song was heard in the sequence.
 
-Both Windows Media Player 12.0.16299.248 and iTunes 12.3.2.35 go over all songs once before going over the sequence again, and both prevent the same song to be played twice in a row. However, at the sequence looping boundaries, it is possible to hear the same song again if at least one other song has been played in between (i.e. minimum distance is 2).
+Both Windows Media Player [7] 12.0.16299.248 and iTunes [8] 12.3.2.35 go over all songs once before going over the sequence again, and both prevent the same song to be played twice in a row. However, at the sequence looping boundaries, it is possible to hear the same song again if at least one other song has been played in between (i.e. minimum distance is 2).
 
 ## Music
 
 The context example of a music album (~12 songs) being played in a loop is not as contemporary as it used to be. This paper disregard that an easy way out of the problem is to add more songs, such that the shuffled sequence never needs to loop in one listening session.
 
-The music playlist example is easy to picture and fun to test in the wild, but it is not the actual problem I'm trying to solve. The problem is how to repeatedly shuffle a cyclic list and avoid *too close* and *too far* duplicates. Solutions involving spreading music genre uniformly [4] have nothing to do with this problem. Using played count history is also not relevant.
+The playlist example is easy to picture and straightforward to test in the wild, but it is not the actual problem I'm trying to solve. The problem is how to repeatedly shuffle a cyclic list and avoid *too close* and *too far* duplicates. Solutions involving spreading music genre uniformly [4] have nothing to do with this problem. Using played count history is also not relevant.
 
 A different example of a cyclic sequence could be spawning a random fruit in a video game for the player to pick up, then spawn another one when they do. It would be annoying to see 3 bananas in a row, or never see a cherry.
 
@@ -67,7 +67,7 @@ At the cost of memory, we now avoid the embarrassing flaws of the stateless appr
 
 Note that the common algorithm for shuffling (Fisher-Yate [2]) is iterative, so you do not need to shuffle the whole list prior of reading the next entry. You can perform the shuffle one item at a time, meaning the size of the sequence does not affect the computation.
 
-The memory cost is not a real problem, considering the entries have to be stored somewhere anyway, and that the algorithm can be done in-place.
+The memory cost is not a real problem considering the entries have to be stored somewhere anyway, and that the algorithm can be done in-place.
 
 What becomes annoying are the looping boundaries, where an entry may be seen as soon as the next, or as far as a full pass.
 
@@ -119,7 +119,7 @@ In an effort to improve the minimum distance between the same entries in our shu
 
 In other words, you now have two sequences that play one after another. There is no way the same song can be heard twice in a row anymore, since you need to at least visit all the entries of the other sequence before seeing it again.
 
-This solution is quite easy to implement, gives good enough results, and in all honesty if it was more prevalent I wouldn't be writing a paper about this.
+This solution is quite easy to implement, gives good enough results, and in all honesty if it was more prevalent I wouldn't be writing a paper about it.
 
 An implementation of this shuffle is available in [split.c](https://github.com/fluxrider/disjoint_shuffle/blob/master/src/split.c).
 
@@ -183,7 +183,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 An alternate solution to the same problem is to shuffle two halves, then shuffle an overlapping region over both halves. This however, comes at the penalty of having to shuffle the list completely before use. This algorithm is not iterative.
 
-Though shuffling the whole sequence before reading samples is quite silly in any context, it is sadly how code libraries are designed [3]. A playing card dealer does not need to shuffle the whole deck if it can simply pick five cards out randomly (as computers can do). Shuffling ahead of time is a human thing.
+Though shuffling the whole sequence before reading samples is quite silly in any context, it is sadly how code libraries are designed [3]. A playing card dealer does not need to shuffle the whole deck if it can simply pick five cards out randomly (as computers can do). Shuffling ahead of time is a human flaw.
 
 ![Split sequence re-shuffled in center](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/overlap.png "Split sequence re-shuffled in center")
 
@@ -212,7 +212,9 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 The algorithms described in this paper are nothing to brag about, but the media players I've tried put little thoughts when implementing their loop/shuffle feature. Simply preventing that a song be heard twice in a row, but not preventing much more than that feels cheap.
 
-Though I'm proposing the **Two Disjoint Shuffles** algorithm, I'd be happy if at least the **Two Shuffles** algorithm would be used more pervasively. The **Overlap** algorithm is much easier to implement than the disjoint one, and players like iTunes pre-shuffle the sequence to show it to you, so that algorithm would be fine in those conditions too.
+The **Two Disjoint Shuffles** algorithm proposed in this paper has a higher variance than the simpler **Two Shuffles** solution, and retains its iterative property.
+
+Though I'm proposing the **Two Disjoint Shuffles** algorithm, I'd be happy if at least the **Two Shuffles** algorithm would be used more pervasively. The **Overlap** algorithm is also easier to implement than the disjoint one, and players that pre-shuffle the sequence to show it to the user like iTunes does could benefit from it.
 
 # GitHub
 
@@ -239,3 +241,9 @@ I'm still human and probably won't want to maintain this **casual paper** for th
 [4] [How random is random on your music player? Dave Lee, BBC News. 2015-02-19](https://www.bbc.com/news/technology-31302312)
 
 [5] [Parole Media Player Shuffle Algorithm](https://github.com/xfce-mirror/parole/blob/4d6b9e46f214606bcf1495e0dcb689acea527d90/src/parole-medialist.c#L1723-L1731)
+
+[6] [RhythmBox](https://github.com/GNOME/rhythmbox)
+
+[7] [Windows Media Player](https://support.microsoft.com/en-ca/help/14209/get-windows-media-player)
+
+[8] [iTunes](https://www.apple.com/itunes/)
