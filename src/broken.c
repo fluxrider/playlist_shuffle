@@ -1,6 +1,6 @@
-// gcc -shared -fPIC -o disjoint.so disjoint.c -lbsd
+// gcc -shared -fPIC -o broken.so broken.c -lbsd
 
-// Disjoint shuffle the sequence each time we go over it.
+// Shuffle the sequence using two interlaced halves of random size each time we go over it.
 
 // Expected results:
 // min:     .5N (good)
@@ -46,8 +46,8 @@ uint32_t next() {
   if(i == n) i = 0;
   if(i == 0) d = range(1, h / 2);
 
-  // the first disjoint shuffle is from [0,h-d-1] and [h, h+d-1], length is (h-d)+(d) = h.
-  // the second d-shuffle is from [h-d, h-1] and [h + d, n-1], length is (d)+(n-h-d) = n - h.
+  // the first broken shuffle is from [0,h-d-1] and [h, h+d-1], length is (h-d)+(d) = h.
+  // the second b-shuffle is from [h-d, h-1] and [h + d, n-1], length is (d)+(n-h-d) = n - h.
   uint32_t shift_1;
   uint32_t local_n;
   uint32_t local_h = 0;

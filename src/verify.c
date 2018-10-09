@@ -9,7 +9,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#include "disjoint.c"
+#include "broken.c"
 
 static bool almostEqual(double a, double b, double e) {
   return fabs(a-b) < e;
@@ -57,11 +57,11 @@ int main(int argc, char * argv[]) {
       for(int is = 0; is < SIZE; is++) {
         const int c = track[interlace_size][was][is];
         // is 'is' within same group as 'was', remember:
-        // the first disjoint shuffle is from [0,h-d-1] and [h, h+d-1].
+        // the first broken shuffle is from [0,h-d-1] and [h, h+d-1].
         const int d = interlace_size;
         const bool was_in_group_a = (was < h - d) || (was >= h && was < h + d);
         const bool is_in_group_a = (is < h - d) || (is >= h && is < h + d);
-        // the destination that would be outside the respective disjoint half should be 0
+        // the destination that would be outside the respective broken half should be 0
         assert(was_in_group_a == is_in_group_a || c == 0);
         // all other destination for all source are expected to be roughly equivalent
         const double expected = 1 / 

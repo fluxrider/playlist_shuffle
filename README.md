@@ -1,4 +1,4 @@
-Two Disjoint Shuffles in a Looping Sequence
+Two Broken Shuffles in a Looping Sequence
 =====
 © 2018 David Lareau, Independent Scientist, Canada
 
@@ -18,7 +18,7 @@ Even for a sequence as small as 2 items, it becomes important to use a smart alg
 
 ## Related Work
 
-The algorithms described in this paper are presented to build-up to the less intuitive **Two Disjoint Shuffles**. The literature doesn't seem to cover shuffling looping sequence, so I designed and chose names for each algorithm.
+The algorithms described in this paper are presented to build-up to the less intuitive **Two Broken Shuffles**. The literature doesn't seem to cover shuffling looping sequence, so I designed and chose names for each algorithm.
 
 In the wild, it is common for music players to have a *Random* or *Shuffle* feature. In VLC Media Player [1] 3.0.4 on the desktop, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row at the looping boundaries.
 
@@ -111,17 +111,17 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 | avg | 100.00 | 1.00 | ideal |
 | std | 0.00 | 0.00 | horrid |
 
-## Two Shuffles
+## Two Disjoint Shuffles
 
 In an effort to improve the minimum distance between the same entries in our shuffled looping sequence, we can split it in halves. The entries of the first half will be seen, followed by the entries of the second half. Shuffling is per halves, so the minimum distance between two entries is now half the total size of the sequence.
 
-![Sequence split in two](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/split.png "Sequence split in two")
+![Sequence split in two](https://github.com/fluxrider/broken_shuffle/raw/master/res/split.png "Sequence split in two")
 
 In other words, you now have two sequences that play one after another. There is no way the same song can be heard twice in a row anymore, since you need to at least visit all the entries of the other sequence before seeing it again.
 
 This solution is quite easy to implement, gives good enough results, and in all honesty if it was more prevalent I wouldn't be writing a paper about it.
 
-An implementation of this shuffle is available in [split.c](https://github.com/fluxrider/disjoint_shuffle/blob/master/src/split.c).
+An implementation of this shuffle is available in [split.c](https://github.com/fluxrider/broken_shuffle/blob/master/src/split.c).
 
 The variance is left to be desired of course. Over just one loop, the listener knows which songs are in which group and is well-informed on what cannot possibly play next.
 
@@ -136,13 +136,13 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 | avg | 100.00 | 1.00 | ideal |
 | std | 20.34 | 0.20 | good |
 
-## Two Shuffles (random size)
+## Two Disjoint Shuffles (random size)
 
 To improve the variance a little, we can split our sequence in randomly sized halves each loop. This way, entries can travel across over multiple pass.
 
-![Sequence split at random points](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/split_r.png "Sequence split at random points")
+![Sequence split at random points](https://github.com/fluxrider/broken_shuffle/raw/master/res/split_r.png "Sequence split at random points")
 
-An implementation of this shuffle is available in [split_r.c](https://github.com/fluxrider/disjoint_shuffle/blob/master/src/split_r.c).
+An implementation of this shuffle is available in [split_r.c](https://github.com/fluxrider/broken_shuffle/blob/master/src/split_r.c).
 
 The half point is now random, so in order to verify that the implementation of this algorithm is correct, one would need to control this random number.
 
@@ -155,22 +155,22 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 | avg | 100.01 | 1.00 | ideal |
 | std | 22.88 | 0.23 | good |
 
-## Two Disjoint Shuffles
+## Two Broken Shuffles
 
-To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other. If the random size is 0, then the pass is equivalent to the **Two Shuffles** algorithm described earlier.
+To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other. If the random size is 0, then the pass is equivalent to the **Two Disjoint Shuffles** algorithm described earlier.
 
-![Sequence split in half with random interlace size](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/disjoint.png "Sequence split in half with random interlace size")
+![Sequence split in half with random interlace size](https://github.com/fluxrider/broken_shuffle/raw/master/res/broken.png "Sequence split in half with random interlace size")
 
-An implementation of this shuffle is available in [disjoint.c](https://github.com/fluxrider/disjoint_shuffle/blob/master/src/disjoint.c).
+An implementation of this shuffle is available in [disjoint.c](https://github.com/fluxrider/broken_shuffle/blob/master/src/broken.c).
 
 The increase of variance is a bit of a hack, since we jump over a gap to consider positions further down the sequence. This makes the distance metric higher, but that's really because we are disregarding values in the gap.
 
 The idea is that the interlacing makes it harder for a human to track the entries mentally.
 This is the weak statement of the paper, as I have no backing for this claim.
 
-In order to verify that the implementation of this algorithm is sound, one needs to know the random interlace size in each pass. The test file [verify.c](https://github.com/fluxrider/disjoint_shuffle/blob/master/src/verify.c) does this and checks that the two groups are shuffled without bias.
+In order to verify that the implementation of this algorithm is sound, one needs to know the random interlace size in each pass. The test file [verify.c](https://github.com/fluxrider/broken_shuffle/blob/master/src/verify.c) does this and checks that the two groups are shuffled without bias.
 
-Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length, with the disjoint cut being random between 1 and 25 from the center.
+Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length, with the breaks being random between 1 and 25 from the center.
 
 | Distance | Value | Normalized | Comment |
 |:---:|:---:|:---:|:---:|
@@ -185,7 +185,7 @@ An alternate solution to the same problem is to shuffle two halves, then shuffle
 
 Though shuffling the whole sequence before reading samples is quite silly in any context, it is sadly how code libraries are designed [3]. A playing card dealer does not need to shuffle the whole deck if it can simply pick five cards out randomly (as computers can do). Shuffling ahead of time is a human flaw.
 
-![Split sequence re-shuffled in center](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/overlap.png "Split sequence re-shuffled in center")
+![Split sequence re-shuffled in center](https://github.com/fluxrider/broken_shuffle/raw/master/res/overlap.png "Split sequence re-shuffled in center")
 
 ```C
 uint32_t next() {
@@ -212,9 +212,9 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 The algorithms described in this paper are nothing to brag about, but the media players I've tried put little thoughts when implementing their loop/shuffle feature. Simply preventing that a song be heard twice in a row, but not preventing much more than that feels cheap.
 
-The **Two Disjoint Shuffles** algorithm proposed in this paper has a higher variance than the simpler **Two Shuffles** solution, and retains its iterative property.
+The **Two Broken Shuffles** algorithm proposed in this paper has a higher variance than the simpler **Two Disjoint Shuffles** solution, and retains its iterative property.
 
-Though I'm proposing the **Two Disjoint Shuffles** algorithm, I'd be happy if at least the **Two Shuffles** algorithm would be used more pervasively. The **Overlap** algorithm is also easier to implement than the disjoint one, and players that pre-shuffle the sequence to show it to the user like iTunes does could benefit from it.
+Though I'm proposing the **Two Broken Shuffles** algorithm, I'd be happy if at least the **Two Disjoint Shuffles** algorithm would be used more pervasively. The **Overlap** algorithm is also easier to implement than the broken one, and applications that pre-shuffle the sequence to show it to the user like iTunes does could benefit from using it.
 
 # GitHub
 
