@@ -28,7 +28,7 @@ Both Windows Media Player [7] 12.0.16299.248 and iTunes [8] 12.3.2.35 go over al
 
 ## Music
 
-The context example of a music album (~12 songs) being played in a loop is not as contemporary as it used to be. This paper disregard that an easy way out of the problem is to add more songs, such that the shuffled sequence never needs to loop in one listening session.
+The application example of a music album (~12 songs) being played in a loop is not as contemporary as it used to be. This paper disregard that an easy way out of the problem is to add more songs, such that the shuffled sequence never needs to loop in one listening session.
 
 The playlist example is easy to picture and straightforward to test in the wild, but it is not the actual problem I'm trying to solve. The problem is how to repeatedly shuffle a cyclic list and avoid *too close* and *too far* duplicates. Solutions involving spreading music genre uniformly [4] have nothing to do with this problem. Using played count history is also not relevant.
 
@@ -157,7 +157,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## Two Broken Shuffles
 
-To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other. If the random size is 0, then the pass is equivalent to the **Two Disjoint Shuffles** algorithm described earlier.
+To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other. If the random size is 0, then the pass is equivalent to the **Two Disjoint Shuffles** algorithm described earlier. I called the algorithm *broken* because each disjoint shuffle is broken into two disconnected parts.
 
 ![Sequence split in half with random interlace size](https://github.com/fluxrider/broken_shuffle/raw/master/res/broken.png "Sequence split in half with random interlace size")
 
