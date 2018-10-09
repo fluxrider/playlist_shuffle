@@ -8,7 +8,7 @@ This paper proposes a novel approach at shuffling a looping sequence that minimi
 
 # Introduction
 
-Imagine you are listening to the songs of an album, and set it up such that the songs be played in random order, and that the albums loops. What are your expectation once all songs have played? Should the songs be replayed in the same order, or should they be reshuffled? If you expect the later, are you okay with the last song you've heard being the next first song?
+Imagine you are listening to the songs of an album, and set it up such that the songs be played in random order, and that the album loops. What are your expectation once all songs have played? Should the songs be replayed in the same order, or should they be reshuffled? If you expect the later, are you okay with the last song you've heard being the next first song? Probably not, and neither do you want to hear it anytime soon.
 
 This paper compares various ways of generating a shuffled looping sequence, measuring statistics on the distance between duplicate entries.
 
@@ -32,7 +32,7 @@ The application example of a music album (~12 songs) being played in a loop is n
 
 The playlist example is easy to picture and straightforward to test in the wild, but it is not the actual problem I'm trying to solve. The problem is how to repeatedly shuffle a cyclic list and avoid *too close* and *too far* duplicates. Solutions involving spreading music genre uniformly [4] have nothing to do with this problem. Using played count history is also not relevant.
 
-A different example of a cyclic sequence could be spawning a random fruit in a video game for the player to pick up, then spawn another one when they do. It would be annoying to see 3 bananas in a row, or never see a cherry.
+A different example of a cyclic sequence could be spawning a random fruit in a video game for the player to pick up, then spawn another one when they do. It would be annoying to see three bananas in a row, or never see a single cherry.
 
 # Algorithms
 
