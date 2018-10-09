@@ -1,4 +1,4 @@
-Two Broken Shuffles in a Looping Sequence
+Two Interlaced Shuffles in a Looping Sequence
 =====
 © 2018 David Lareau, Independent Scientist, Canada
 
@@ -18,7 +18,7 @@ Even for a sequence as small as 2 items, it becomes important to use a smart alg
 
 ## Related Work
 
-The algorithms described in this paper are presented to build-up to the less intuitive **Two Broken Shuffles**. The literature doesn't seem to cover shuffling looping sequence, so I designed and chose names for each algorithm.
+The algorithms described in this paper are presented to build-up to the less intuitive **Two Interlaced Shuffles**. The literature doesn't seem to cover shuffling looping sequence, so I designed and chose names for each algorithm.
 
 In the wild, it is common for music players to have a *Random* or *Shuffle* feature. In VLC Media Player [1] 3.0.4 on the desktop, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row at the looping boundaries.
 
@@ -155,9 +155,9 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 | avg | 100.01 | 1.00 | ideal |
 | std | 22.88 | 0.23 | good |
 
-## Two Broken Shuffles
+## Two Interlaced Shuffles
 
-To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other. If the random size is 0, then the pass is equivalent to the **Two Disjoint Shuffles** algorithm described earlier. I called the algorithm *broken* because each disjoint shuffle is broken into two disconnected parts.
+To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other. If the random size is 0, then the pass is equivalent to the **Two Disjoint Shuffles** algorithm described earlier. I sometime call this algorithm *broken shuffle* because each disjoint shuffle is broken into two disconnected parts.
 
 ![Sequence split in half with random interlace size](https://github.com/fluxrider/broken_shuffle/raw/master/res/broken.png "Sequence split in half with random interlace size")
 
@@ -212,9 +212,9 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 The algorithms described in this paper are nothing to brag about, but the media players I've tried put little thoughts when implementing their loop/shuffle feature. Simply preventing that a song be heard twice in a row, but not preventing much more than that feels cheap.
 
-The **Two Broken Shuffles** algorithm proposed in this paper has a higher variance than the simpler **Two Disjoint Shuffles** solution, and retains its iterative property.
+The **Two Interlaced Shuffles** algorithm proposed in this paper has a higher variance than the simpler **Two Disjoint Shuffles** solution, and retains its iterative property.
 
-Though I'm proposing the **Two Broken Shuffles** algorithm, I'd be happy if at least the **Two Disjoint Shuffles** algorithm would be used more pervasively. The **Overlap** algorithm is also easier to implement than the broken one, and applications that pre-shuffle the sequence to show it to the user like iTunes does could benefit from using it.
+Though I'm proposing the **Two Interlaced Shuffles** algorithm, I'd be happy if at least the **Two Disjoint Shuffles** algorithm would be used more pervasively. The **Overlap Reshuffle** algorithm is also easier to implement than the broken one, and applications that pre-shuffle the sequence to show it to the user like iTunes does could benefit from using it.
 
 # GitHub
 
