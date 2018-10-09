@@ -30,7 +30,7 @@ Both Windows Media Player 12.0.16299.248 and iTunes 12.3.2.35 go over all songs 
 
 The context example of a music album (~12 songs) being played in a loop is not as contemporary as it used to be. This paper disregard that an easy way out of the problem is to add more songs, such that the shuffled sequence never needs to loop in one listening session.
 
-The music playlist example is easy to picture and fun to test in the wild, but it is not the actual problem I'm trying to solve. The problem is how to repeatedly shuffle a cyclic list and avoid *too close* and *too far* duplicates. Solutions involving spreading music genre uniformly [4] have nothing to do with this problem. Using played count history is also unaplicable.
+The music playlist example is easy to picture and fun to test in the wild, but it is not the actual problem I'm trying to solve. The problem is how to repeatedly shuffle a cyclic list and avoid *too close* and *too far* duplicates. Solutions involving spreading music genre uniformly [4] have nothing to do with this problem. Using played count history is also not relevant.
 
 A different example of a cyclic sequence could be spawning a random fruit in a video game for the player to pick up, then spawn another one when they do. It would be annoying to see 3 bananas in a row, or never see a cherry.
 
@@ -138,7 +138,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## Two Shuffles (random size)
 
-To improve the variance a little bit, we can split our sequence in ramdomly sized halves each loop. This way, entries can travel across over multiple pass.
+To improve the variance a little bit, we can split our sequence in randomly sized halves each loop. This way, entries can travel across over multiple pass.
 
 ![Sequence split at random points](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/split_r.png "Sequence split at random points")
 
@@ -157,7 +157,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## Two Disjoint Shuffles
 
-To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other. If the random size is 0, then the pass is equivalent to the **Split** shuffle described earlier.
+To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other. If the random size is 0, then the pass is equivalent to the **Two Shuffles** algorithm described earlier.
 
 ![Sequence split in half with random interlace size](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/disjoint.png "Sequence split in half with random interlace size")
 
@@ -168,7 +168,7 @@ The increase of variance is a bit of a hack, since we jump over a gap to conside
 The idea is that the interlacing makes it harder for a human to track the entries mentally.
 This is the weak statement of the paper, as I have no backing for this claim.
 
-In order to verify that the implementation of this algorithm is sound, one needs to know the random interlace size in each pass. The test file verify.c does this and checks that the two groups are shuffled without bias.
+In order to verify that the implementation of this algorithm is sound, one needs to know the random interlace size in each pass. The test file [verify.c](https://github.com/fluxrider/disjoint_shuffle/blob/master/src/verify.c) does this and checks that the two groups are shuffled without bias.
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length, with the disjoint cut being random between 1 and 25 from the center.
 
@@ -212,7 +212,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 The algorithms described in this paper are nothing to brag about, but the media players I've tried put little thoughts when implementing their loop/shuffle feature. Simply preventing that a song be heard twice in a row, but not preventing much more than that feels cheap.
 
-Though I'm proposing the **Two Disjoint Shuffles** algorithm, I'd be happy if at least the **Two Shuffles** algorithm would be used more pervasively. The **Overlap** algorithm is much easier to implement than the disjoint one, and players like iTunes pre-shuffle the sequence to show it to you, so that algorithm would be fine in those case too.
+Though I'm proposing the **Two Disjoint Shuffles** algorithm, I'd be happy if at least the **Two Shuffles** algorithm would be used more pervasively. The **Overlap** algorithm is much easier to implement than the disjoint one, and players like iTunes pre-shuffle the sequence to show it to you, so that algorithm would be fine in those conditions too.
 
 # GitHub
 
