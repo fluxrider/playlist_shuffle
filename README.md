@@ -210,11 +210,11 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 # Conclusion
 
-The algorithms described in this paper are nothing to brag about, but the media players I've tried put little thoughts when implementing their loop/shuffle feature. Simply preventing that a song be heard twice in a row, but not preventing much more than that feels cheap.
+The algorithms described in this paper are nothing to brag about, but the media players I've tried in my life (on PC, cars, or ghetto blaster) always came short when it came to the loop/shuffle combined features. Simply preventing that a song be heard twice in a row, but not preventing much further than that feels cheap.
 
-The **Two Interlaced Shuffles** algorithm proposed in this paper has a higher variance than the simpler **Two Disjoint Shuffles** solution, and retains its iterative property.
+Though I'm proposing the **Two Interlaced Shuffles** algorithm, I'd be happy if at least the **Two Disjoint Shuffles** algorithm would be used more pervasively. Nevertheless, the interlaced algorithm gives a higher variance, remains an iterative algorithm, and comes at marginal computation cost.
 
-Though I'm proposing the **Two Interlaced Shuffles** algorithm, I'd be happy if at least the **Two Disjoint Shuffles** algorithm would be used more pervasively. The **Overlap Reshuffle** algorithm is also easier to implement than the broken one, and applications that pre-shuffle the sequence to show it to the user like iTunes does could benefit from using it.
+The **Overlap Reshuffle** algorithm is easier to implement than the interlaced one, and applications that pre-shuffle the sequence to show it to the user, like iTunes does, could benefit from using it.
 
 # GitHub
 
