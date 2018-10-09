@@ -115,13 +115,13 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 In an effort to improve the minimum distance between the same entries in our shuffled looping sequence, we can split it in halves. The entries of the first half will be seen, followed by the entries of the second half. Shuffling is per halves, so the minimum distance between two entries is now half the total size of the sequence.
 
-![Sequence split in two](https://github.com/fluxrider/broken_shuffle/raw/master/res/split.png "Sequence split in two")
+![Sequence split in two](https://github.com/fluxrider/playlist_shuffle/raw/master/res/split.png "Sequence split in two")
 
 In other words, you now have two sequences that play one after another. There is no way the same song can be heard twice in a row anymore, since you need to at least visit all the entries of the other sequence before seeing it again.
 
 This solution is quite easy to implement, gives good enough results, and in all honesty if it was more prevalent I wouldn't be writing a paper about it.
 
-An implementation of this shuffle is available in [split.c](https://github.com/fluxrider/broken_shuffle/blob/master/src/split.c).
+An implementation of this shuffle is available in [split.c](https://github.com/fluxrider/playlist_shuffle/blob/master/src/split.c).
 
 The variance is left to be desired of course. Over just one loop, the listener knows which songs are in which group and is well-informed on what cannot possibly play next.
 
@@ -140,9 +140,9 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 To improve the variance a little, we can split our sequence in randomly sized halves each loop. This way, entries can travel across over multiple pass.
 
-![Sequence split at random points](https://github.com/fluxrider/broken_shuffle/raw/master/res/split_r.png "Sequence split at random points")
+![Sequence split at random points](https://github.com/fluxrider/playlist_shuffle/raw/master/res/split_r.png "Sequence split at random points")
 
-An implementation of this shuffle is available in [split_r.c](https://github.com/fluxrider/broken_shuffle/blob/master/src/split_r.c).
+An implementation of this shuffle is available in [split_r.c](https://github.com/fluxrider/playlist_shuffle/blob/master/src/split_r.c).
 
 The half point is now random, so in order to verify that the implementation of this algorithm is correct, one would need to control this random number.
 
@@ -159,16 +159,16 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other. If the random size is 0, then the pass is equivalent to the **Two Disjoint Shuffles** algorithm described earlier. I sometime call this algorithm *broken shuffle* because each disjoint shuffle is broken into two disconnected parts.
 
-![Sequence split in half with random interlace size](https://github.com/fluxrider/broken_shuffle/raw/master/res/broken.png "Sequence split in half with random interlace size")
+![Sequence split in half with random interlace size](https://github.com/fluxrider/playlist_shuffle/raw/master/res/broken.png "Sequence split in half with random interlace size")
 
-An implementation of this shuffle is available in [broken.c](https://github.com/fluxrider/broken_shuffle/blob/master/src/broken.c).
+An implementation of this shuffle is available in [broken.c](https://github.com/fluxrider/playlist_shuffle/blob/master/src/broken.c).
 
 The increase of variance is a bit of a hack, since we jump over a gap to consider positions further down the sequence. This makes the distance metric higher, but that's really because we are disregarding values in the gap.
 
 The idea is that the interlacing makes it harder for a human to track the entries mentally.
 This is the weak statement of the paper, as I have no backing for this claim.
 
-In order to verify that the implementation of this algorithm is sound, one needs to know the random interlace size in each pass. The test file [verify.c](https://github.com/fluxrider/broken_shuffle/blob/master/src/verify.c) does this and checks that the two groups are shuffled without bias.
+In order to verify that the implementation of this algorithm is sound, one needs to know the random interlace size in each pass. The test file [verify.c](https://github.com/fluxrider/playlist_shuffle/blob/master/src/verify.c) does this and checks that the two groups are shuffled without bias.
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length, with the breaks being random between 1 and 25 from the center.
 
@@ -185,7 +185,7 @@ An alternate solution to the same problem is to shuffle two halves, then shuffle
 
 Though shuffling the whole sequence before reading samples is quite silly in any context, it is sadly how code libraries are designed [3]. A playing card dealer does not need to shuffle the whole deck if it can simply pick five cards out randomly (as computers can do). Shuffling ahead of time is a human flaw.
 
-![Split sequence re-shuffled in center](https://github.com/fluxrider/broken_shuffle/raw/master/res/overlap.png "Split sequence re-shuffled in center")
+![Split sequence re-shuffled in center](https://github.com/fluxrider/playlist_shuffle/raw/master/res/overlap.png "Split sequence re-shuffled in center")
 
 ```C
 uint32_t next() {
