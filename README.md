@@ -40,7 +40,7 @@ A different example of a cyclic sequence could be spawning a random fruit in a v
 
 One of the simplest algorithm to think about when generating the next entry in a sequence is to select it randomly, without keeping track of any states. This opens up the possibility that an item be seen an infinite amount of times in a row, or never be seen at all.
 
-As mentionned in *Related Works*, this is how Parole Media Player, and Rhythmbox mostly behave.
+As mentioned in *Related Works*, this is how Parole Media Player, and Rhythmbox mostly behave.
 
 The variance in the sequence is ideal, meaning the next entry is always a surprise.
 
@@ -63,7 +63,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 An improvement over the stateless method, is to keep the sequence shuffled in memory, visiting each entry once before reshuffling it and going over it again.
 
-At the cost of memory, we now avoid the embarassing flaws of the stateless approach. All entries will be seen, and only once per pass. The variance is much lower than the stateless approach because of these restrictions, but it's still ideal given the compromise.
+At the cost of memory, we now avoid the embarrassing flaws of the stateless approach. All entries will be seen, and only once per pass. The variance is much lower than the stateless approach because of these restrictions, but it's still ideal given the compromise.
 
 Note that the common algorithm for shuffling (Fisher-Yate [2]) is iterative, so you do not need to shuffle the whole list prior of reading the next entry. You can perform the shuffle one item at a time, meaning the size of the sequence does not affect the computation.
 
@@ -71,7 +71,7 @@ The memory cost is not a real problem, considering the entries have to be stored
 
 What becomes annoying are the looping boundaries, where an entry may be seen as soon as the next, or as far as a full pass.
 
-As mentionned in *Related Works*, this is how VLC, Windows Media Player and iTunes mostly work, sometime with a quick hack to prevent the same song twice in a row, but nothing more.
+As mentioned in *Related Works*, this is how VLC, Windows Media Player and iTunes mostly work, sometime with a quick hack to prevent the same song twice in a row, but nothing more.
 
 ```C
 uint32_t next() {
@@ -125,7 +125,7 @@ An implementation of this shuffle is available in [split.c](https://github.com/f
 
 The variance is left to be desired of course. Over just one loop, the listener knows which songs are in which group and is well informed on what cannot possibly play next.
 
-The shuffle is now biased, so it becomes slightly harder to verify that the implementation of this algorith is correct. You would need to verify that each half has been shuffled correctly without bias.
+The shuffle is now biased, so it becomes slightly harder to verify that the implementation of this algorithm is correct. You would need to verify that each half has been shuffled correctly without bias.
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length.
 
@@ -181,7 +181,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## Overlap Reshuffle
 
-An alternate solution to the same problem is to shuffle two halves, then shuffle an overlaping region over both halves. This however, comes at the penalty of having to shuffle the list completely before use. This algorithm is not iterative.
+An alternate solution to the same problem is to shuffle two halves, then shuffle an overlapping region over both halves. This however, comes at the penalty of having to shuffle the list completely before use. This algorithm is not iterative.
 
 Though shuffling the whole sequence before reading samples is quite silly in any context, it is sadly how code libraries are designed [3]. A playing card dealer does not need to shuffle the whole deck if it can simply pick five cards out randomly (as computers can do). Shuffling ahead of time is a human thing.
 
