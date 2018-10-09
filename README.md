@@ -63,7 +63,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 An improvement over the stateless method, is to keep the sequence shuffled in memory, visiting each entry once before reshuffling it and going over it again.
 
-At the cost of memory, we now avoid the embarassing flaws of the stateless approach. All entries will be seen, and only once per full pass. The variance is much lower than the stateless approach because of these restrictions, but it's still ideal given the compromise.
+At the cost of memory, we now avoid the embarassing flaws of the stateless approach. All entries will be seen, and only once per pass. The variance is much lower than the stateless approach because of these restrictions, but it's still ideal given the compromise.
 
 Note that the common algorithm for shuffling (Fisher-Yate [2]) is iterative, so you do not need to shuffle the whole list prior of reading the next entry. You can perform the shuffle one item at a time, meaning the size of the sequence does not affect the computation.
 
@@ -117,13 +117,15 @@ In an effort to improve the minimum distance between the same entries in our shu
 
 ![Sequence split in two](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/split.png "Sequence split in two")
 
-In other words, you now have two sequences, which play one after another. There is no way the same song can be heard twice in a row anymore, since you need to at least visit all the entries of the other sequence before seeing it again.
+In other words, you now have two sequences that play one after another. There is no way the same song can be heard twice in a row anymore, since you need to at least visit all the entries of the other sequence before seeing it again.
 
-This solution is quite easy to implement, gives good enough results, and in all honesty, if it was prevalent, I wouldn't be writing a paper about this.
+This solution is quite easy to implement, gives good enough results, and in all honesty if it was more prevalent I wouldn't be writing a paper about this.
+
+An implementation of this shuffle is available in [split.c](https://github.com/fluxrider/disjoint_shuffle/blob/master/src/split.c).
 
 The variance is left to be desired of course. Over just one loop, the listener knows which songs are in which group and is well informed on what cannot possibly play next.
 
-The shuffle is now biased, so it becomes slightly harder to verify that the implementation of this algorith is correct. You would need to verify that each half has been shuffle correctly without bias.
+The shuffle is now biased, so it becomes slightly harder to verify that the implementation of this algorith is correct. You would need to verify that each half has been shuffled correctly without bias.
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length.
 
@@ -139,6 +141,8 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 To improve the variance a little bit, we can split our sequence in ramdomly sized halves each loop. This way, entries can travel across over multiple pass.
 
 ![Sequence split at random points](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/split_r.png "Sequence split at random points")
+
+An implementation of this shuffle is available in [split_r.c](https://github.com/fluxrider/disjoint_shuffle/blob/master/src/split_r.c).
 
 The halfpoint is now random, so in order to verify that the implementation of this algorithm is correct, one would need to control this random number.
 
@@ -156,6 +160,8 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other. If the random size is 0, then the pass is equivalent to the **Split** shuffle described earlier.
 
 ![Sequence split in half with random interlace size](https://github.com/fluxrider/disjoint_shuffle/raw/master/res/disjoint.png "Sequence split in half with random interlace size")
+
+An implementation of this shuffle is available in [disjoint.c](https://github.com/fluxrider/disjoint_shuffle/blob/master/src/disjoint.c).
 
 The increase of variance is a bit of a hack, since we jump over a gap to consider positions further down the sequence. This makes the distance metric higher, but that's really because we are disregarding values in the gap.
 
@@ -206,16 +212,20 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 The algorithms described in this paper are nothing to brag about, but the media players I've tried put little thoughts when implementing their loop/shuffle feature. Simply preventing that a song be heard twice in a row, but not preventing much more than that feels cheap.
 
-Though I'm proposing the **Disjoint Shuffle** algorithm, I'd be happy if at least the **Split** algorithm would be used more pervasively. The **Overlap** algorithm is much easier to implement than the disjoint one, and players like iTunes pre-shuffle the sequence to show it to you, so that algorithm would be fine in those case too.
+Though I'm proposing the **Disjoint Shuffle** algorithm, I'd be happy if at least the **Two Shuffles** algorithm would be used more pervasively. The **Overlap** algorithm is much easier to implement than the disjoint one, and players like iTunes pre-shuffle the sequence to show it to you, so that algorithm would be fine in those case too.
 
 # GitHub
 
 I'm putting this paper on GitHub for multiple reasons.
 - It's free access.
-- Reviews are not limited in time.
-- Reviews are not forced on anyone.
-- Reviewers are recognized (at least in form of committer, on in issue discussion threads).
 - I can bless derivative work by adding links to them.
+
+Now keep in mind though reviews are:
+- welcomed.
+- not limited in time.
+- not forced on anyone.
+- recognized (at least in form of committer, on in issue discussion threads).
+I'm still human and probably won't want to maintain this **casual paper** for the rest of my life. Be gentle. I'm scared that because the topic and implementations are easy to grasp, there will be too many reviews.
 
 # References
 
