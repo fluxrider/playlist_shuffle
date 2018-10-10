@@ -26,8 +26,6 @@ Parole Media Player 1.0.1 (xfce's player) prevents playing the same song twice i
 
 Both Windows Media Player [7] 12.0.16299.248 and iTunes [8] 12.3.2.35 go over all songs once before going over the sequence again, and both prevent the same song to be played twice in a row. However, at the sequence looping boundaries, it is possible to hear the same song again if at least one other song has been played in between (i.e. minimum distance is 2).
 
-### Rant
-
 I am perplex that the spirit of the feature is obviously to play all the songs, shuffled in random order, and when it loops avoid having *too close* and *too far* duplicates, yet no player satisfies. The current implementations all feel uncommon and bizarre. I suspect the computer scientists involved got too literal with the name of the buttons, be it *random* or *shuffle*. In what scenario would you be happy to hear clusters of the same song? In the rare case where that is really what you seek, this freak need can be accomodated by allowing adding the same song multiple times to the playlist.
 
 ## Music
@@ -42,9 +40,7 @@ A different example of a cyclic sequence could be spawning a random fruit in a v
 
 ## Stateless
 
-One of the simplest algorithm to think about when generating the next entry in a sequence is to select it randomly, without keeping track of any states. This opens up the possibility that an item be seen an infinite amount of times in a row, or never be seen at all.
-
-As mentioned in *Related Works*, this is how Parole Media Player, and Rhythmbox mostly behave.
+One of the simplest algorithm to think about when generating the next entry in a sequence is to select it randomly, without keeping track of any states. This opens up the possibility that an item be seen an infinite amount of times in a row, or never be seen at all. As mentioned in *Related Works*, this is how Parole Media Player, and Rhythmbox mostly behave.
 
 The variance in the sequence is ideal, meaning the next entry is always a surprise.
 
@@ -65,17 +61,11 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## Shuffle
 
-An improvement over the stateless method, is to keep the sequence shuffled in memory, visiting each entry once before reshuffling it and going over it again.
-
-At the cost of memory, we now avoid the embarrassing flaws of the stateless approach. All entries will be seen, and only once per pass. The variance is much lower than the stateless approach because of these restrictions, but it's still ideal given the compromise.
+An improvement over the stateless method, is to keep the sequence shuffled in memory, visiting each entry once before reshuffling it and going over it again. At the cost of memory, we now avoid the main flaw of the stateless approach. All entries will be seen once and only once per pass. The variance is much lower than the stateless approach because of these restrictions, but it's still ideal given the compromise.
 
 Note that the common algorithm for shuffling (Fisher-Yate [2]) is iterative, so you do not need to shuffle the whole list prior of reading the next entry. You can perform the shuffle one item at a time, meaning the size of the sequence does not affect the computation.
 
-The memory cost is not a real problem considering the entries have to be stored somewhere anyway, and that the algorithm can be done in-place.
-
-What becomes annoying are the looping boundaries, where an entry may be seen as soon as the next, or as far as a full pass.
-
-As mentioned in *Related Works*, this is how VLC, Windows Media Player and iTunes mostly work, sometime with a quick hack to prevent the same song twice in a row, but nothing more.
+The memory cost is not a real problem considering the entries have to be stored somewhere anyway, and that the algorithm can be done in-place. What becomes annoying are the looping boundaries, where an entry may be seen as soon as the next, or as far as a full pass. As mentioned in *Related Works*, this is how VLC, Windows Media Player and iTunes mostly work, sometime with a quick hack to prevent the same song twice in a row, but nothing more.
 
 ```C
 uint32_t next() {
@@ -121,17 +111,13 @@ In an effort to improve the minimum distance between the same entries in our shu
 
 In other words, you now have two sequences that play one after another. There is no way the same song can be heard twice in a row anymore, since you need to at least visit all the entries of the other sequence before seeing it again.
 
-Unless the sequence comes pre-shuffled, the first pass should shuffle over the whole sequence. We only begin using the two disjoint shuffles once we start looping, from the second pass and onwards. This is shown in the figure below by the full bar on top.
+Note that unless the sequence comes pre-shuffled, the first pass should shuffle over the whole sequence. We only begin using the two disjoint shuffles once we start looping, from the second pass and onwards. This is shown in the figure below by the full bar on top.
 
 ![](res/split.svg)
 
-This solution is quite easy to implement, gives good enough results, and in all honesty if it was more prevalent I wouldn't be writing a paper about it.
+This solution is quite easy to implement, gives good enough results, and in all honesty if it was more prevalent I wouldn't be writing a paper about it. An implementation of this shuffle is available in [split.c](src/split.c).
 
-An implementation of this shuffle is available in [split.c](src/split.c).
-
-The variance is left to be desired of course. Over just one loop, the listener knows which songs are in which group and is well-informed on what cannot possibly play next.
-
-The shuffle is now biased, so it becomes slightly harder to verify that the implementation of this algorithm is correct. You would need to verify that each half has been shuffled correctly without bias.
+The variance is left to be desired of course. Over just one loop, the listener knows which songs are in which group and is well-informed on what cannot possibly play next. The overall shuffle is now biased, so it becomes slightly harder to verify that the implementation of this algorithm is correct. You would need to verify that each half has been shuffled correctly in itself.
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length.
 
@@ -148,9 +134,7 @@ To improve the variance a little, we can split our sequence in randomly sized ha
 
 ![](res/split_r.svg)
 
-An implementation of this shuffle is available in [split_r.c](src/split_r.c).
-
-The half point is now random, so in order to verify that the implementation of this algorithm is correct, one would need to control this random number.
+An implementation of this shuffle is available in [split_r.c](src/split_r.c). The half point is now random, so in order to verify that the implementation of this algorithm is correct, one would need to control this random number.
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves have a random length between [25, 75].
 
@@ -163,17 +147,13 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## Two Interlaced Shuffles
 
-To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other.
-
-If the random size is 0, then the pass is equivalent to the **Two Disjoint Shuffles** algorithm described earlier. I sometime call this algorithm *broken shuffle* because each disjoint shuffle is broken into two disconnected parts.
+To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other. I sometime call this algorithm *broken shuffle* because each disjoint shuffle is broken into two disconnected parts. If the interlace size is 0, then the pass is equivalent to the *Two Disjoint Shuffles* algorithm described earlier.
 
 ![](res/broken.svg)
 
-An implementation of this shuffle is available in [broken.c](src/broken.c).
+The increase in variance is a bit of a hack, since we jump over a gap to consider positions further down the sequence. This makes the distance metric higher, but that's really because we are disregarding values in the gap. However, unlike the previous algorithm, here both halves are the same size, which means no group is left with a smaller internal variance.
 
-The increase of variance is a bit of a hack, since we jump over a gap to consider positions further down the sequence. This makes the distance metric higher, but that's really because we are disregarding values in the gap. However, unlike the previous algorithm, here both halves are the same size, which means no group is left with a smaller internal variance.
-
-In order to verify that the implementation of this algorithm is sound, one needs to know the random interlace size in each pass. The test file [verify.c](src/verify.c) does this and checks that the two groups are shuffled without bias.
+An implementation of this shuffle is available in [broken.c](src/broken.c). In order to verify that the implementation of this algorithm is sound, one needs to know the random interlace size in each pass. The test file [verify.c](src/verify.c) does this and checks that the two groups are shuffled without bias.
 
 Distance statistics in a simulation with a sequence of 100 elements, looping 10,000 times. The halves are 50 in length, with the breaks being random between 1 and 25 from the center.
 
