@@ -26,6 +26,10 @@ Parole Media Player 1.0.1 (xfce's player) prevents playing the same song twice i
 
 Both Windows Media Player [7] 12.0.16299.248 and iTunes [8] 12.3.2.35 go over all songs once before going over the sequence again, and both prevent the same song to be played twice in a row. However, at the sequence looping boundaries, it is possible to hear the same song again if at least one other song has been played in between (i.e. minimum distance is 2).
 
+### Rant
+
+I am perplex that the spirit of the feature is obviously to play all the songs, shuffled in random order, and when it loops avoid having *too close* and *too far* duplicates, yet no player satisfies. The current implementations all feel uncommon and bizarre. I suspect the computer scientists involved got too literal with the name of the buttons, be it *random* or *shuffle*. In what scenario would you be happy to hear clusters of the same song? In the rare case where that is really what you seek, this freak need can be accomodated by allowing adding the same song multiple times to the playlist.
+
 ## Music
 
 The application example of a music album (~12 songs) being played in a loop is not as contemporary as it used to be. This paper disregard that an easy way out of the problem is to add more songs, such that the shuffled sequence never needs to loop in one listening session.
