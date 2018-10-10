@@ -115,9 +115,11 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 In an effort to improve the minimum distance between the same entries in our shuffled looping sequence, we can split it in halves. The entries of the first half will be seen, followed by the entries of the second half. Shuffling is per halves, so the minimum distance between two entries is now half the total size of the sequence.
 
-![](res/split.svg)
-
 In other words, you now have two sequences that play one after another. There is no way the same song can be heard twice in a row anymore, since you need to at least visit all the entries of the other sequence before seeing it again.
+
+Unless the sequence comes pre-shuffled, the first pass should shuffle over the whole sequence. We only begin using the two disjoint shuffles once we start looping, from the second pass and onwards. This is shown in the figure below by the full bar on top.
+
+![](res/split.svg)
 
 This solution is quite easy to implement, gives good enough results, and in all honesty if it was more prevalent I wouldn't be writing a paper about it.
 
