@@ -140,7 +140,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## Two Disjoint Shuffles (random size)
 
-To improve the variance a little, we can split our sequence in randomly sized halves each loop. This way, entries can travel across over multiple pass.
+To improve the variance a little, we can split our sequence in randomly sized halves each loop. This way, entries can travel across over multiple pass. However, because one of the halves is now smaller, the variance is not improved that much per pass, and can only be appreciated after several loops.
 
 ![](res/split_r.svg)
 
@@ -159,16 +159,15 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 ## Two Interlaced Shuffles
 
-To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other. If the random size is 0, then the pass is equivalent to the **Two Disjoint Shuffles** algorithm described earlier. I sometime call this algorithm *broken shuffle* because each disjoint shuffle is broken into two disconnected parts.
+To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other.
+
+If the random size is 0, then the pass is equivalent to the **Two Disjoint Shuffles** algorithm described earlier. I sometime call this algorithm *broken shuffle* because each disjoint shuffle is broken into two disconnected parts.
 
 ![](res/broken.svg)
 
 An implementation of this shuffle is available in [broken.c](src/broken.c).
 
-The increase of variance is a bit of a hack, since we jump over a gap to consider positions further down the sequence. This makes the distance metric higher, but that's really because we are disregarding values in the gap.
-
-The idea is that the interlacing makes it harder for a human to track the entries mentally.
-This is the weak statement of the paper, as I have no backing for this claim.
+The increase of variance is a bit of a hack, since we jump over a gap to consider positions further down the sequence. This makes the distance metric higher, but that's really because we are disregarding values in the gap. However, unlike the previous algorithm, here both halves are the same size, which means no group is left with a smaller internal variance.
 
 In order to verify that the implementation of this algorithm is sound, one needs to know the random interlace size in each pass. The test file [verify.c](src/verify.c) does this and checks that the two groups are shuffled without bias.
 
