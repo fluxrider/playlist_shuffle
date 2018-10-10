@@ -1,7 +1,0 @@
-digraph {
-  node[shape=record]
-  rankdir=LR
-  split_small [label="{ A | __B__ }"]
-  split_big [label="{ __A__ | B }"]
-  split_med [label="{ _A_ | _B_ }"]
-}

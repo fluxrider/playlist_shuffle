@@ -115,7 +115,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 In an effort to improve the minimum distance between the same entries in our shuffled looping sequence, we can split it in halves. The entries of the first half will be seen, followed by the entries of the second half. Shuffling is per halves, so the minimum distance between two entries is now half the total size of the sequence.
 
-![Sequence split in two](https://github.com/fluxrider/playlist_shuffle/raw/master/res/split.png "Sequence split in two")
+![Sequence split in two](https://github.com/fluxrider/playlist_shuffle/raw/master/res/split.svg"Sequence split in two")
 
 In other words, you now have two sequences that play one after another. There is no way the same song can be heard twice in a row anymore, since you need to at least visit all the entries of the other sequence before seeing it again.
 
@@ -140,7 +140,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 To improve the variance a little, we can split our sequence in randomly sized halves each loop. This way, entries can travel across over multiple pass.
 
-![Sequence split at random points](https://github.com/fluxrider/playlist_shuffle/raw/master/res/split_r.png "Sequence split at random points")
+![Sequence split at random points](https://github.com/fluxrider/playlist_shuffle/raw/master/res/split_r.svg "Sequence split at random points")
 
 An implementation of this shuffle is available in [split_r.c](https://github.com/fluxrider/playlist_shuffle/blob/master/src/split_r.c).
 
@@ -159,7 +159,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 To improve the variance even further, I propose we keep the halves the same size, but interlace them. The size of the interlace from the center is random per pass, such that values can travel from one half to the other. If the random size is 0, then the pass is equivalent to the **Two Disjoint Shuffles** algorithm described earlier. I sometime call this algorithm *broken shuffle* because each disjoint shuffle is broken into two disconnected parts.
 
-![Sequence split in half with random interlace size](https://github.com/fluxrider/playlist_shuffle/raw/master/res/broken.png "Sequence split in half with random interlace size")
+![Sequence split in half with random interlace size](https://github.com/fluxrider/playlist_shuffle/raw/master/res/broken.svg "Sequence split in half with random interlace size")
 
 An implementation of this shuffle is available in [broken.c](https://github.com/fluxrider/playlist_shuffle/blob/master/src/broken.c).
 
@@ -185,7 +185,7 @@ An alternate solution to the same problem is to shuffle two halves, then shuffle
 
 Though shuffling the whole sequence before reading samples is quite silly in any context, it is sadly how code libraries are designed [3]. A playing card dealer does not need to shuffle the whole deck if it can simply pick five cards out randomly (as computers can do). Shuffling ahead of time is a human flaw.
 
-![Split sequence re-shuffled in center](https://github.com/fluxrider/playlist_shuffle/raw/master/res/overlap.png "Split sequence re-shuffled in center")
+![Split sequence re-shuffled in center](https://github.com/fluxrider/playlist_shuffle/raw/master/res/overlap.svg "Split sequence re-shuffled in center")
 
 ```C
 uint32_t next() {

@@ -1,0 +1,18 @@
+<svg width="220" height="150" viewBox="0 0 220 150">
+<!-- standard shuffle -->
+<g transform="translate(10 10)">
+  <rect fill="lightblue" stroke="black" x="0" y="0" width="200" height="30"/>
+</g>
+<!-- split_even and overlap -->
+<g transform="translate(10 50)">
+  <rect fill="lightblue" stroke="black" x="0" y="0" width="100" height="30"/>
+  <rect fill="burlywood" stroke="black" x="100" y="0" width="100" height="30"/>
+  <rect fill="olivedrab" stroke="black" x="50" y="10" width="100" height="30"/>
+</g>
+<!-- split_even and overlap -->
+<g transform="translate(10 100)">
+  <rect fill="lightblue" stroke="black" x="0" y="0" width="100" height="30"/>
+  <rect fill="burlywood" stroke="black" x="100" y="0" width="100" height="30"/>
+  <rect fill="olivedrab" stroke="black" x="50" y="10" width="100" height="30"/>
+</g>
+</svg>

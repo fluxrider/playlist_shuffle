@@ -1,0 +1,33 @@
+<svg width="220" height="170" viewBox="0 0 220 170">
+<!-- standard shuffle -->
+<g transform="translate(10 10)">
+  <rect fill="lightblue" stroke="black" x="0" y="0" width="200" height="30"/>
+</g>
+<!-- interlace_big -->
+<g transform="translate(10 50)">
+  <rect fill="lightblue" stroke="black" x="0" y="0" width="50" height="30"/>
+  <rect fill="burlywood" stroke="black" x="50" y="0" width="50" height="30"/>
+  <rect fill="lightblue" stroke="black" x="100" y="0" width="50" height="30"/>
+  <rect fill="burlywood" stroke="black" x="150" y="0" width="50" height="30"/>
+<!--
+  <text text-anchor="middle" x="25" y="22" font-size="20">A</text>
+  <text text-anchor="middle" x="75" y="22" font-size="20">B</text>
+  <text text-anchor="middle" x="125" y="22" font-size="20">A</text>
+  <text text-anchor="middle" x="175" y="22" font-size="20">B</text>
+-->
+</g>
+<!-- interlace_small -->
+<g transform="translate(10 90)">
+  <rect fill="lightblue" stroke="black" x="0" y="0" width="85" height="30"/>
+  <rect fill="burlywood" stroke="black" x="85" y="0" width="15" height="30"/>
+  <rect fill="lightblue" stroke="black" x="100" y="0" width="15" height="30"/>
+  <rect fill="burlywood" stroke="black" x="115" y="0" width="85" height="30"/>
+</g>
+<!-- interlace_med -->
+<g transform="translate(10 130)">
+  <rect fill="lightblue" stroke="black" x="0" y="0" width="70" height="30"/>
+  <rect fill="burlywood" stroke="black" x="70" y="0" width="30" height="30"/>
+  <rect fill="lightblue" stroke="black" x="100" y="0" width="30" height="30"/>
+  <rect fill="burlywood" stroke="black" x="130" y="0" width="70" height="30"/>
+</g>
+</svg>
