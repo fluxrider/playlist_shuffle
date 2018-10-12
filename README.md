@@ -8,7 +8,7 @@ This paper proposes a novel approach at shuffling a looping sequence that minimi
 
 # Introduction
 
-Imagine you are listening to the songs of an album, and set it up such that the songs be played in random order [9](https://en.wikipedia.org/wiki/Shuffle_play), and that the album loops. What are your expectation once all songs have played? Should the songs be replayed in the same order, or should they be reshuffled? If you expect the later, are you okay with the last song you've heard being the next first song? Probably not, and neither do you want to hear it anytime soon.
+Imagine you are listening to the songs of an album, and set it up such that the songs be played in random order [[9]](https://en.wikipedia.org/wiki/Shuffle_play), and that the album loops. What are your expectation once all songs have played? Should the songs be replayed in the same order, or should they be reshuffled? If you expect the later, are you okay with the last song you've heard being the next first song? Probably not, and neither do you want to hear it anytime soon.
 
 This paper compares various ways of generating a shuffled looping sequence, measuring statistics on the distance between duplicate entries.
 
