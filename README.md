@@ -8,7 +8,7 @@ This paper proposes a novel approach at shuffling a looping sequence that minimi
 
 # Introduction
 
-Imagine you are listening to the songs of an album, and set it up such that the songs be played in random order [9], and that the album loops. What are your expectation once all songs have played? Should the songs be replayed in the same order, or should they be reshuffled? If you expect the later, are you okay with the last song you've heard being the next first song? Probably not, and neither do you want to hear it anytime soon.
+Imagine you are listening to the songs of an album, and set it up such that the songs be played in random order [9](https://en.wikipedia.org/wiki/Shuffle_play), and that the album loops. What are your expectation once all songs have played? Should the songs be replayed in the same order, or should they be reshuffled? If you expect the later, are you okay with the last song you've heard being the next first song? Probably not, and neither do you want to hear it anytime soon.
 
 This paper compares various ways of generating a shuffled looping sequence, measuring statistics on the distance between duplicate entries.
 
@@ -20,11 +20,12 @@ Even for a sequence as small as 2 items, it becomes important to use a smart alg
 
 The algorithms described in this paper are presented to build-up to the less intuitive **Two Interlaced Shuffles**. The literature doesn't seem to cover shuffling looping sequence, so I designed and chose names for each algorithm.
 
-In the wild, it is common for music players to have a *Random* or *Shuffle* feature. In VLC Media Player [1] 3.0.4 on the desktop, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row at the looping boundaries.
+In the wild, it is common for music players to have a *Random* or *Shuffle* feature. In VLC Media Player 3.0.4 on the desktop, the behavior of the *Random* toggle is like the **Shuffle** algorithm described below, where the same song can be heard twice in a row at the looping boundaries [[1]](https://github.com/videolan/vlc/blob/9bffed4c4d27b641bb035732348bf55dd2d3b835/src/playlist/thread.c#L172-L184).
 
-Parole Media Player 1.0.1 (xfce's player) prevents playing the same song twice in a row, and also tries not to play any of the last three songs heard (when possible) [5]. Aside from this small history, it is **stateless**. This behavior would be hard to infer without the source code. Rhythmbox [6] 3.4.2, a Gnome player, seems to be using a **stateless** algorithm as well, as I could hear the same song multiple times before every song was heard in the sequence.
+Parole Media Player 1.0.1 (xfce's player) prevents playing the same song twice in a row, and also tries not to play any of the last three songs heard (when possible) [[5]](https://github.com/xfce-mirror/parole/blob/4d6b9e46f214606bcf1495e0dcb689acea527d90/src/parole-medialist.c#L1723-L1731). Aside from this small history, it is **stateless**. This behavior would be hard to infer without the source code. Rhythmbox [[6]](https://github.com/GNOME/rhythmbox)
+ 3.4.2, a Gnome player, seems to be using a **stateless** algorithm as well, as I could hear the same song multiple times before every song was heard in the sequence.
 
-Both Windows Media Player [7] 12.0.16299.248 and iTunes [8] 12.3.2.35 go over all songs once before going over the sequence again, and both prevent the same song to be played twice in a row. However, at the sequence looping boundaries, it is possible to hear the same song again if at least one other song has been played in between (i.e. minimum distance is 2).
+Both Windows Media Player [[7]](https://support.microsoft.com/en-ca/help/14209/get-windows-media-player) 12.0.16299.248 and iTunes [[8]](https://www.apple.com/itunes/) 12.3.2.35 go over all songs once before going over the sequence again, and both prevent the same song to be played twice in a row. However, at the sequence looping boundaries, it is possible to hear the same song again if at least one other song has been played in between (i.e. minimum distance is 2).
 
 I am perplex that the spirit of the feature is obviously to play all the songs, shuffled in random order, and when it loops avoid having *too close* and *too far* duplicates, yet no player satisfies. The implementations all feel bizarre. I suspect the computer scientists involved got too literal with the name of the buttons, be it *random* or *shuffle*. In what scenario would you be happy to hear clusters of the same song? In the rare case where that is really what you seek, this freak need can be accommodated by allowing adding the same song multiple times to the playlist.
 
@@ -32,7 +33,7 @@ I am perplex that the spirit of the feature is obviously to play all the songs, 
 
 The application example of a music album (~12 songs) being played in a loop is not as contemporary as it used to be. This paper disregard that an easy way out of the problem is to add more songs, such that the shuffled sequence never needs to loop in one listening session.
 
-The playlist example is easy to picture and straightforward to test in the wild, but it is not the actual problem I'm trying to solve. The problem is how to repeatedly shuffle a cyclic list and avoid *too close* and *too far* duplicates. Solutions involving spreading music genre uniformly [4] have nothing to do with this problem. Using played count history is also not relevant.
+The playlist example is easy to picture and straightforward to test in the wild, but it is not the actual problem I'm trying to solve. The problem is how to repeatedly shuffle a cyclic list and avoid *too close* and *too far* duplicates. Solutions involving spreading music genre uniformly [[4]](https://www.bbc.com/news/technology-31302312) have nothing to do with this problem. Using played count history is also not relevant.
 
 A different example of a cyclic sequence could be spawning a random fruit in a video game for the player to pick up, then spawn another one when they do. It would be annoying to see three bananas in a row, or never see a single cherry.
 
@@ -63,7 +64,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 An improvement over the stateless method, is to keep the sequence shuffled in memory, visiting each entry once before reshuffling it and going over it again. At the cost of memory, we now avoid the main flaw of the stateless approach. All entries will be seen once and only once per pass. The variance is much lower than the stateless approach because of these restrictions, but it's still ideal given the compromise.
 
-Note that the common algorithm for shuffling (Fisher-Yate [2]) is iterative, so you do not need to shuffle the whole list prior of reading the next entry. You can perform the shuffle one item at a time, meaning the size of the sequence does not affect the computation.
+Note that the common algorithm for shuffling (Fisher-Yate [[2]](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle)) is iterative, so you do not need to shuffle the whole list prior of reading the next entry. You can perform the shuffle one item at a time, meaning the size of the sequence does not affect the computation.
 
 The memory cost is not a real problem considering the entries have to be stored somewhere anyway, and that the algorithm can be done in-place. What becomes annoying are the looping boundaries, where an entry may be seen as soon as the next, or as far as a full pass. As mentioned in *Related Works*, this is how VLC, Windows Media Player and iTunes mostly work, sometime with a quick hack to prevent the same song twice in a row, but nothing more.
 
@@ -168,7 +169,7 @@ Distance statistics in a simulation with a sequence of 100 elements, looping 10,
 
 An alternate solution to the same problem is to shuffle two halves, then shuffle an overlapping region over both halves. This however, comes at the penalty of having to shuffle the list completely before use. This algorithm is not iterative.
 
-Though shuffling the whole sequence before reading samples is quite silly in any context, it is sadly how code libraries are designed [3]. A playing card dealer does not need to shuffle the whole deck if it can simply pick five cards out randomly (as computers can do). Shuffling ahead of time is a human flaw.
+Though shuffling the whole sequence before reading samples is quite silly in any context, it is sadly how code libraries are designed [[3]](https://docs.oracle.com/javase/9/docs/api/java/util/Collections.html#shuffle-java.util.List-). A playing card dealer does not need to shuffle the whole deck if it can simply pick five cards out randomly (as computers can do). Shuffling ahead of time is a human flaw.
 
 ![](res/overlap.svg)
 
@@ -217,7 +218,7 @@ I'm still human and probably won't want to maintain this **casual paper** for th
 
 # References
 
-[1] [VLC Media Player](https://www.videolan.org/)
+[1] [VLC Media Player Random Algorithm](https://github.com/videolan/vlc/blob/9bffed4c4d27b641bb035732348bf55dd2d3b835/src/playlist/thread.c#L172-L184)
 
 [2] [Fisher-Yate Shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle)
 
