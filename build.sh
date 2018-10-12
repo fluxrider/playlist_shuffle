@@ -1,6 +1,7 @@
 set -e
 
 gcc src/stats.c -ldl -lm
+gcc -o print src/print.c -ldl -lm
 gcc -shared -fPIC -o order.so src/order.c
 gcc -shared -fPIC -o random.so src/random.c -lbsd
 gcc -shared -fPIC -o shuffle.so src/shuffle.c -lbsd

@@ -44,7 +44,7 @@ static void swap(uint32_t i, uint32_t j) {
 uint32_t next() {
   uint32_t h = n / 2;
   if(i == n) i = 0;
-  if(i == 0) d = range(1, h / 2);
+  if(i == 0) d = range(0, h / 2);
 
   // the first broken shuffle is from [0,h-d-1] and [h, h+d-1], length is (h-d)+(d) = h.
   // the second b-shuffle is from [h-d, h-1] and [h + d, n-1], length is (d)+(n-h-d) = n - h.
