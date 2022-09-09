@@ -202,20 +202,6 @@ Though I'm proposing the **Two Interlaced Shuffles** algorithm, I'd be happy if 
 
 The **Overlap Reshuffle** algorithm is easier to implement than the interlaced one, and applications that pre-shuffle the sequence to show it to the user, like iTunes does, could benefit from using it.
 
-# GitHub
-
-I'm putting this paper on GitHub for multiple reasons.
-- It's free access.
-- I can bless derivative work by adding links to them.
-
-Now keep in mind though reviews are:
-- Welcomed.
-- Not limited in time.
-- Not forced on anyone.
-- Recognized (at least in form of committer, on in issue discussion threads).
-
-I'm still human and probably won't want to maintain this **casual paper** for the rest of my life. Be gentle. I'm scared that because the topic and implementations are easy to grasp, there will be too many reviews.
-
 # References
 
 [1] [VLC Media Player Random Algorithm](https://github.com/videolan/vlc/blob/9bffed4c4d27b641bb035732348bf55dd2d3b835/src/playlist/thread.c#L172-L184)
